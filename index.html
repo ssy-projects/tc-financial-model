@@ -86,7 +86,7 @@ main{overflow-y:auto;background:#FFFFFF;padding:1.5rem 1.75rem 3rem}
 .gauge-metric span{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--amber2);margin-left:.4rem}
 
 /* ── KPI strip ── */
-.kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1.5rem}
+.kpi-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1.5rem}
 .kpi-box{background:#FFFFFF;padding:.75rem .9rem}
 .kpi-label{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.2rem}
 .kpi-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--navy)}
@@ -238,7 +238,7 @@ tr.section-hdr td{background:var(--navy);color:rgba(255,255,255,.8);font-family:
   .irr-metric-lbl{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45)!important}
   .irr-metric-val{font-family:'JetBrains Mono',monospace;font-size:.9rem;font-weight:600;color:#E8A020!important}
   /* KPI bar */
-  .kpi-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:#D1CFC8;border:1px solid #D1CFC8;margin-bottom:.6rem;break-inside:avoid}
+  .kpi-bar{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:#D1CFC8;border:1px solid #D1CFC8;margin-bottom:.6rem;break-inside:avoid}
   .kpi-b{background:#fff!important;padding:.45rem .65rem;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .kpi-b-lbl{font-size:.57rem;letter-spacing:.09em;text-transform:uppercase;color:#6B7280;margin-bottom:.1rem}
   .kpi-b-val{font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:700;color:#000061!important}
@@ -542,6 +542,7 @@ tr.section-hdr td{background:var(--navy);color:rgba(255,255,255,.8);font-family:
     <div class="kpi-box"><div class="kpi-label">Net Daily Hire</div><div class="kpi-val" id="kpiNetHire">—</div></div>
     <div class="kpi-box"><div class="kpi-label">Annual Principal</div><div class="kpi-val" id="kpiPrin">—</div></div>
     <div class="kpi-box"><div class="kpi-label">Pre-del Interest</div><div class="kpi-val" id="kpiPreDel">—</div></div>
+    <div class="kpi-box"><div class="kpi-label">Avg Annual FCF (Charter)</div><div class="kpi-val" id="kpiAvgFCF">—</div></div>
   </div>
 
   <div class="panel-title">Free Cash Flow to Equity — Charter Period Only</div>
@@ -1605,6 +1606,7 @@ function buildPrintPages(params) {
       <div class="kpi-b"><div class="kpi-b-lbl">Bank Loan (${fp(ltv,0)})</div><div class="kpi-b-val">${fu(bankLoan)}</div></div>
       <div class="kpi-b"><div class="kpi-b-lbl">Net Daily Hire</div><div class="kpi-b-val">$${fmtN(netDaily,2)}/day</div></div>
       <div class="kpi-b"><div class="kpi-b-lbl">Annual Principal</div><div class="kpi-b-val">${fu(annPrin)}</div></div>
+      <div class="kpi-b"><div class="kpi-b-lbl">Avg Annual FCF</div><div class="kpi-b-val">${fu(fcfRows.reduce((s,r)=>s+r.fcf,0)/Math.max(1,fcfRows.length))}/yr</div></div>
       <div class="kpi-b"><div class="kpi-b-lbl">Pre-del Interest</div><div class="kpi-b-val">${fu(preDelInt)}</div></div>
     </div>
     <div class="ps">Free Cash Flow to Equity — Charter Period Y1 to Y${tcDur}</div>
@@ -1864,6 +1866,8 @@ function calculate() {
   document.getElementById('kpiNetHire').textContent = '$'+fmtN(netDaily,2)+'/day'+(grossHireJPY>0?' (Y1 USD equiv.)':'');
   document.getElementById('kpiPrin').textContent    = fmtU(annPrin);
   document.getElementById('kpiPreDel').textContent  = fmtU(preDelInt);
+  const avgFCF = fcfRows.length>0 ? fcfRows.reduce((s,r)=>s+r.fcf,0)/fcfRows.length : 0;
+  document.getElementById('kpiAvgFCF').textContent  = fmtU(avgFCF)+'/yr';
 
   // ── FCF table ──
   const thead=document.getElementById('fcfHead');
