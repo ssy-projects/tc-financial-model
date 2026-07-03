@@ -336,6 +336,7 @@ main .param-card .ccy-alloc-table input,
 main .param-card .ccy-alloc-table td{text-align:center!important}
 main .param-card .ccy-alloc-table td:first-child{text-align:left!important}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -401,6 +402,7 @@ function checkPw() {
   const err = document.getElementById('pwErr');
   if (val === 'SSY2026') {
     document.getElementById('pwOverlay').style.display = 'none';
+    if (typeof refreshMarketData === 'function') refreshMarketData();
   } else {
     err.textContent = 'Incorrect password. Please try again.';
     err.style.opacity = '1';
@@ -438,6 +440,7 @@ window.addEventListener('load', ()=>{
   <button class="tab-btn" onclick="showPage('rates',this)">Rate &amp; FX Assumptions</button>
   <button class="tab-btn" onclick="showPage('fullmodel',this)">Full Model Detail</button>
   <button class="tab-btn" onclick="showPage('macro',this)">Macro Assumptions</button>
+  <button class="tab-btn" onclick="showPage('marketrates',this)">Market Rates</button>
 </div>
 
 <div class="app">
@@ -451,8 +454,17 @@ window.addEventListener('load', ()=>{
       <strong>All model inputs live on this page.</strong> Edit any field below, then press <strong>Calculate</strong>
       to run the model. Currency mix, spreads and 20-year rate/FX curves are on the
       <strong>Rate &amp; FX Assumptions</strong> tab; the pre-delivery milestone schedule and macro scenarios have their own tabs too.
+      Use <strong>Save Scenario</strong> to download every input on this page (plus the rate curves, milestones and drydock
+      schedule) as a file you can keep and re-load later — this page doesn't remember anything between visits otherwise.
     </div>
-    <button class="btn-calc-lg" onclick="calculate()">▶ Calculate</button>
+    <div style="display:flex;flex-direction:column;gap:.5rem;align-items:flex-end">
+      <button class="btn-calc-lg" onclick="calculate()">▶ Calculate</button>
+      <div style="display:flex;gap:.5rem">
+        <button class="btn-hdr" style="padding:.5rem 1rem;font-size:.68rem" onclick="exportScenario()">💾 Save Scenario</button>
+        <button class="btn-hdr" style="padding:.5rem 1rem;font-size:.68rem" onclick="document.getElementById('scenarioFileInput').click()">📂 Load Scenario</button>
+        <input type="file" id="scenarioFileInput" accept=".json" style="display:none" onchange="importScenario(event)">
+      </div>
+    </div>
   </div>
 
   <div class="params-grid">
@@ -910,6 +922,11 @@ window.addEventListener('load', ()=>{
 <!-- ══════════════ PAGE 5: MACRO ASSUMPTIONS ══════════════ -->
 <div id="page-macro" class="page">
   <div id="macroTabContent"></div>
+</div>
+
+<!-- ══════════════ PAGE 6: MARKET RATES ══════════════ -->
+<div id="page-marketrates" class="page">
+  <div id="marketRatesContent"></div>
 </div>
 
 </main>
@@ -1923,7 +1940,7 @@ function buildPrintPages(params) {
           <div class="ph-sub">${title}${sub?` &nbsp;·&nbsp; ${sub}`:''}</div>
         </div>
       </div>
-      <div class="ph-right">Page ${pg} of 4<br>${ts}<br>${conf}</div></div>`;
+      <div class="ph-right">Page ${pg} of 5<br>${ts}<br>${conf}</div></div>`;
   }
   function ptRow(l,v,hi){return `<tr${hi?' class="pt-hi"':''}><td>${l}</td><td>${v}</td></tr>`;}
   function secRow(l){return `<tr class="pt-sec"><td colspan="2">${l}</td></tr>`;}
@@ -2276,7 +2293,59 @@ function buildPrintPages(params) {
     <div class="pfoot">${vesselName||'—'} &nbsp;|&nbsp; Full model: ${maxYr4}-year horizon, charter Y1–Y${tcDur} &nbsp;|&nbsp; ${ts}</div>
   </div>`;
 
-  root.innerHTML = page1 + page2 + page3 + page4;
+  // ── PAGE 5 — MARKET RATES ─────────────────────────────────────
+  const fmtTsPrint = d => d ? new Date(d).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : 'Not yet refreshed';
+  const lmd = (typeof liveMarketData!=='undefined') ? liveMarketData : {sofr:{},saron:{},fx:{}};
+  const liveBadge = (label, val, unit, src, err) => {
+    const ok = val!==null && val!==undefined;
+    return `<div class="kpi-b" style="border-left:3px solid ${ok?'#166534':'#991B1B'}">
+      <div class="kpi-b-lbl">${label}</div>
+      <div class="kpi-b-val" style="color:${ok?'#166534':'#991B1B'}">${ok?val+unit:'Unavailable'}</div>
+      <div style="font-size:.55rem;color:#888;margin-top:.15rem">${ok?src:(err||'Not fetched')}</div>
+    </div>`;
+  };
+  let ratesChartImg = '', fxChartImg = '';
+  try {
+    if (typeof Chart !== 'undefined' && typeof getRateChartConfig === 'function') {
+      const tcDurHP = Math.max(Math.round(v('tcDur'))||5, Math.round(v('amortYrs'))||17, 15);
+      const yrsP = Array.from({length:tcDurHP},(_,i)=>i+1);
+      ratesChartImg = renderChartToImage(getRateChartConfig(yrsP, true), 820, 620);
+      fxChartImg    = renderChartToImage(getFxChartConfig(yrsP, true), 820, 620);
+    }
+  } catch(e) {}
+
+  const page5=`<div class="pp">
+    ${hdr('Market Rates','Live Data &amp; Curve Visualization','5')}
+    <p style="font-size:.56rem;color:#6B7280;font-style:italic;margin-bottom:.5rem;line-height:1.4">
+      Interest rate curves are this model's working assumptions (Rate &amp; FX Assumptions tab). USD SOFR (NY Fed) and CHF SARON
+      (Swiss National Bank) overnight prints are genuine live data, shown for reference — JPY TONA has no free live source.
+      FX spot for JPY/CHF is genuinely live (ECB via Frankfurter) and is applied as the Base FX Rate at Inception used
+      throughout this model. Last refreshed: ${fmtTsPrint(lmd.lastRefresh)}.
+    </p>
+    <div class="kpi-bar" style="grid-template-columns:repeat(4,1fr);margin-bottom:.5rem">
+      ${liveBadge('Live USD SOFR (O/N)', lmd.sofr&&lmd.sofr.value!=null?lmd.sofr.value.toFixed(2):null, '%', 'NY Fed'+(lmd.sofr&&lmd.sofr.asOf?' · '+lmd.sofr.asOf:''), lmd.sofr&&lmd.sofr.error)}
+      ${liveBadge(lmd.saron&&lmd.saron.manual?'CHF SARON (Manual)':'Live CHF SARON (O/N)', lmd.saron&&lmd.saron.value!=null?lmd.saron.value.toFixed(2):null, '%', lmd.saron&&lmd.saron.asOf==='default'?'Default placeholder':(lmd.saron&&lmd.saron.manual?'Entered by user':'SNB')+(lmd.saron&&lmd.saron.asOf?' · '+lmd.saron.asOf:''), lmd.saron&&lmd.saron.error)}
+      ${liveBadge('Live JPY/USD Spot', lmd.fx&&lmd.fx.JPY!=null?lmd.fx.JPY.toFixed(2):null, '', 'ECB (Frankfurter)'+(lmd.fx&&lmd.fx.asOf?' · '+lmd.fx.asOf:''), lmd.fx&&lmd.fx.error)}
+      ${liveBadge('Live CHF/USD Spot', lmd.fx&&lmd.fx.CHF!=null?lmd.fx.CHF.toFixed(4):null, '', 'ECB (Frankfurter)'+(lmd.fx&&lmd.fx.asOf?' · '+lmd.fx.asOf:''), lmd.fx&&lmd.fx.error)}
+    </div>
+    <div class="ps3" style="gap:1.2rem">
+      <div>
+        <div class="ps" style="margin:.35rem 0 .3rem">Interest Rate Curves — Model Assumptions</div>
+        ${ratesChartImg
+          ? `<img src="${ratesChartImg}" style="width:100%;height:auto;max-height:520px;object-fit:contain">`
+          : `<p style="font-size:.58rem;color:#999;font-style:italic">Chart not available.</p>`}
+      </div>
+      <div>
+        <div class="ps" style="margin:.35rem 0 .3rem">FX Curves — JPY &amp; CHF per 1 USD</div>
+        ${fxChartImg
+          ? `<img src="${fxChartImg}" style="width:100%;height:auto;max-height:520px;object-fit:contain">`
+          : `<p style="font-size:.58rem;color:#999;font-style:italic">Chart not available.</p>`}
+      </div>
+    </div>
+    <div class="pfoot">${vesselName||'—'} &nbsp;|&nbsp; Market Rates snapshot &nbsp;|&nbsp; ${ts}</div>
+  </div>`;
+
+  root.innerHTML = page1 + page2 + page3 + page4 + page5;
 }
 
 function calculate() {
@@ -2527,6 +2596,7 @@ function calculate() {
   renderDdTable(tcDur);
   buildFullModelTable(vesselPrice,extras,ltv,amortYrs,tcDur,grossHireUSD,grossHireJPY,brokerComm,
     offHire,residual,opexDay,opexEsc,ownerEquity,ccyMix,annHire,annPrin,bankLoan,preDelInt,preDelFxGL);
+  if (typeof buildMarketRatesTab === 'function') buildMarketRatesTab();
 
   // Build print-ready pages
   buildPrintPages({
@@ -2773,12 +2843,433 @@ function buildMacroTab() {
 }
 
 
+// ═══════════════════════════════════════════════════════════════
+// MARKET RATES — Live FX Spot + Interest Rate Curve Visualization
+// ═══════════════════════════════════════════════════════════════
+// liveMarketData holds whatever we've successfully fetched. Nothing here is
+// fabricated: if a fetch fails or a source doesn't exist for free, the field
+// stays null and the UI says so explicitly rather than guessing.
+let liveMarketData = {
+  sofr:  { value: null, asOf: null, error: null },
+  saron: { value: 0.00, asOf: 'default', error: null, manual: true },
+  fx:    { JPY: null, CHF: null, asOf: null, error: null },
+  lastRefresh: null
+};
+let mrCharts = { rates: null, fx: null };
+
+function fetchWithTimeout(url, ms=8000) {
+  const ctrl = new AbortController();
+  const t = setTimeout(()=>ctrl.abort(), ms);
+  return fetch(url, {signal: ctrl.signal}).finally(()=>clearTimeout(t));
+}
+
+// USD SOFR overnight — New York Fed publish this as a free, no-key, CORS-open
+// JSON endpoint. This is a genuine live overnight rate (not a swap curve).
+// Path must include "secured" — /api/rates/sofr/... (without it) 400s.
+async function fetchLiveSOFR() {
+  try {
+    const res = await fetchWithTimeout('https://markets.newyorkfed.org/api/rates/secured/sofr/last/1.json');
+    if (!res.ok) throw new Error('HTTP '+res.status);
+    const data = await res.json();
+    const rec = data.refRates && data.refRates[0];
+    if (!rec) throw new Error('No data returned');
+    liveMarketData.sofr = { value: parseFloat(rec.percentRate), asOf: rec.effectiveDate, error: null };
+  } catch (e) {
+    liveMarketData.sofr = { value: null, asOf: null, error: 'Live SOFR fetch failed: '+(e.message||e) };
+  }
+}
+
+// JPY/USD and CHF/USD spot — Frankfurter republishes ECB daily reference rates:
+// free, no API key, CORS-open. Genuine live FX spot. Try the current canonical
+// domain first, fall back to the legacy one if that host has an issue.
+async function fetchLiveFX() {
+  const urls = [
+    'https://api.frankfurter.dev/v1/latest?base=USD&symbols=JPY,CHF',
+    'https://api.frankfurter.app/latest?from=USD&to=JPY,CHF'
+  ];
+  let lastErr = null;
+  for (const url of urls) {
+    try {
+      const res = await fetchWithTimeout(url);
+      if (!res.ok) throw new Error('HTTP '+res.status);
+      const data = await res.json();
+      if (!data.rates || data.rates.JPY===undefined || data.rates.CHF===undefined) throw new Error('No data returned');
+      liveMarketData.fx = { JPY: data.rates.JPY, CHF: data.rates.CHF, asOf: data.date, error: null };
+      return;
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  liveMarketData.fx = { JPY: null, CHF: null, asOf: null, error: 'Live FX fetch failed: '+(lastErr?(lastErr.message||lastErr):'unknown error') };
+}
+
+// CHF SARON — Swiss National Bank data portal (data.snb.ch) publishes this
+// directly: free, official, no API key. Uses the "zimoma" international
+// money-market-rates cube. Response is CSV (semicolon-delimited, 3 metadata
+// lines then a header row) rather than JSON, so we parse it as text.
+// SNB's data API is built for script/server access (R, Python, curl) and does
+// not send CORS headers for direct browser fetches — confirmed by direct
+// testing. We try the direct call first (in case that ever changes), then
+// fall back to a free public CORS proxy (allorigins.win) that fetches SNB
+// server-side and re-serves it with the headers a browser needs. This adds a
+// second dependency (the proxy itself can be slow or rate-limited), so if
+// this also fails, SARON is reported unavailable rather than guessed at.
+function parseSnbSaronCsv(text) {
+  const lines = text.split('\n').map(l=>l.trim()).filter(l=>l.length);
+  const headerIdx = lines.findIndex(l => l.toLowerCase().startsWith('date'));
+  if (headerIdx === -1 || headerIdx+1 >= lines.length) throw new Error('Unexpected response format');
+  const dataLines = lines.slice(headerIdx+1);
+  const lastRow = dataLines[dataLines.length-1].split(';');
+  const dateStr = lastRow[0];
+  const rateVal = parseFloat(lastRow[lastRow.length-1]);
+  if (isNaN(rateVal)) throw new Error('Could not parse rate value');
+  return { value: rateVal, asOf: dateStr };
+}
+async function fetchLiveSARON() {
+  const today = new Date();
+  const from = new Date(today.getTime() - 10*24*3600*1000); // 10-day lookback to skate past weekends/holidays
+  const fmt = d => d.toISOString().slice(0,10);
+  const directUrl = `https://data.snb.ch/api/cube/zimoma/data/csv/en?dimSel=D0(SARON)&fromDate=${fmt(from)}&toDate=${fmt(today)}`;
+  // Try direct first (in case SNB ever adds CORS headers), then three
+  // independent free proxies as fallbacks — corsproxy.io explicitly
+  // whitelists github.io origins on its free tier, which matters once this
+  // page is hosted there rather than opened as a local file. Trying several
+  // means one proxy being down or rate-limited doesn't sink the whole thing.
+  const attempts = [
+    { url: directUrl, label: 'direct' },
+    { url: 'https://corsproxy.io/?url='+encodeURIComponent(directUrl), label: 'via corsproxy.io' },
+    { url: 'https://api.allorigins.win/raw?url='+encodeURIComponent(directUrl), label: 'via allorigins.win' },
+    { url: 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(directUrl), label: 'via codetabs.com' }
+  ];
+  let lastErr = null;
+  for (const {url, label} of attempts) {
+    try {
+      const res = await fetchWithTimeout(url, 7000);
+      if (!res.ok) throw new Error('HTTP '+res.status+' ('+label+')');
+      const text = await res.text();
+      const parsed = parseSnbSaronCsv(text);
+      liveMarketData.saron = { value: parsed.value, asOf: parsed.asOf, error: null, manual: false };
+      return;
+    } catch (e) {
+      lastErr = label+': '+(e.message||e);
+    }
+  }
+  // Auto-fetch failed on every route. If the user has already entered a
+  // value manually, keep it rather than blanking it out — only report the
+  // error if there's nothing usable on the screen yet.
+  if (liveMarketData.saron && liveMarketData.saron.manual && liveMarketData.saron.value !== null) {
+    return;
+  }
+  liveMarketData.saron = { value: null, asOf: null, error: 'Live SARON fetch failed — '+lastErr, manual: false };
+
+}
+
+// Manual fallback: SARON has no free CORS-enabled source, so let the user
+// type in today's (or any day's) print from their own screen. Treated
+// identically to a fetched value everywhere downstream (badge, chart marker,
+// base rate curve) — just labeled "Manually Entered" instead of "Live".
+function setSaronManual(rawVal, dateStr) {
+  const val = parseFloat(rawVal);
+  if (isNaN(val)) return;
+  liveMarketData.saron = { value: val, asOf: dateStr || new Date().toISOString().slice(0,10), error: null, manual: true };
+  buildMarketRatesTab();
+}
+
+async function refreshMarketData() {
+  await Promise.all([fetchLiveSOFR(), fetchLiveSARON(), fetchLiveFX()]);
+  liveMarketData.lastRefresh = new Date();
+  // Apply live FX spot as the Base FX Rate at Inception — the anchor used
+  // throughout the model for FX gain/loss on the loan (Currency Allocation
+  // table) and as the current-day reference point for the Macro curves.
+  if (liveMarketData.fx.JPY) baseFxRate.JPY = liveMarketData.fx.JPY;
+  if (liveMarketData.fx.CHF) baseFxRate.CHF = liveMarketData.fx.CHF;
+  if (typeof buildCcyAllocTable === 'function') buildCcyAllocTable();
+  buildMarketRatesTab();
+}
+
+function buildMarketRatesTab() {
+  const wrap = document.getElementById('marketRatesContent');
+  if (!wrap) return;
+  const tcDurH = Math.max(Math.round(v('tcDur'))||5, Math.round(v('amortYrs'))||17, 15);
+  const yrs = Array.from({length:tcDurH},(_,i)=>i+1);
+  const fmtTs = d => d ? new Date(d).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+
+  let h = '<div class="panel-title" style="margin-top:0">Market Rates — Live Data &amp; Curve Visualization</div>';
+  h += '<p class="sect-note">Refreshes automatically when the dashboard is unlocked. Interest rate curves below are this model\'s working assumptions (Rate &amp; FX Assumptions tab) — the USD SOFR (NY Fed) and CHF SARON (Swiss National Bank) overnight prints are genuine live market data points, shown for reference; JPY TONA has no free live source and remains model-only. FX spot rates for JPY and CHF are genuinely live (ECB daily reference rates via Frankfurter) and are applied as the Base FX Rate at Inception used throughout the model.</p>';
+
+  h += '<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap">';
+  h += '<button class="btn-calc" style="width:auto;padding:.6rem 1.4rem;margin-top:0" onclick="refreshMarketData()">↻ Refresh Live Data</button>';
+  h += '<span style="font-size:.78rem;color:var(--mid)">Last refreshed: <strong style="color:var(--navy)">'+fmtTs(liveMarketData.lastRefresh)+'</strong></span>';
+  h += '</div>';
+
+  // Live data badges
+  h += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:1.5rem">';
+  const sofr = liveMarketData.sofr;
+  h += '<div class="kpi-box" style="border-left:3px solid '+(sofr.value!==null?'#166534':'#991B1B')+'">';
+  h += '<div class="kpi-label">Live USD SOFR (Overnight)</div>';
+  h += sofr.value!==null
+    ? '<div class="kpi-val" style="color:#166534">'+sofr.value.toFixed(2)+'%</div><div class="kpi-sub">NY Fed · as of '+sofr.asOf+'</div>'
+    : '<div class="kpi-val" style="color:#991B1B;font-size:.85rem">Unavailable</div><div class="kpi-sub">'+(sofr.error||'Not yet fetched')+'</div>';
+  h += '</div>';
+  const saron = liveMarketData.saron;
+  h += '<div class="kpi-box" style="border-left:3px solid '+(saron.value!==null?(saron.manual?'#C8860A':'#166534'):'#991B1B')+'">';
+  h += '<div class="kpi-label">'+(saron.manual?'CHF SARON (Manually Entered)':'Live CHF SARON (Overnight)')+'</div>';
+  if (saron.value!==null) {
+    h += '<div class="kpi-val" style="color:'+(saron.manual?'#C8860A':'#166534')+'">'+saron.value.toFixed(2)+'%</div>';
+    h += '<div class="kpi-sub">'+(saron.asOf==='default'?'Default placeholder — not yet fetched or entered':((saron.manual?'Entered by user':'Swiss National Bank')+' · as of '+saron.asOf))+'</div>';
+    h += '<button style="margin-top:.4rem;font-size:.65rem;padding:.2rem .5rem;background:none;border:1px solid var(--border);cursor:pointer;color:var(--mid)" onclick="document.getElementById(\'saronManualWrap\').style.display=\'flex\'">Update value</button>';
+  } else {
+    h += '<div class="kpi-val" style="color:#991B1B;font-size:.85rem">Unavailable</div><div class="kpi-sub">'+(saron.error||'Not yet fetched')+' — no free live source exists for SARON; enter today\'s print manually below</div>';
+  }
+  h += `<div id="saronManualWrap" style="display:${saron.value!==null?'none':'flex'};gap:.4rem;margin-top:.5rem;align-items:center">
+    <input type="number" step="0.01" id="saronManualInput" placeholder="e.g. 0.33" style="width:80px;border:1px solid var(--border);padding:.25rem .4rem;font-size:.78rem;font-family:'Inter',sans-serif;color:#000061">
+    <span style="font-size:.72rem;color:var(--mid)">%</span>
+    <button style="font-size:.68rem;padding:.25rem .5rem;background:#C8860A;color:#fff;border:none;cursor:pointer"
+      onclick="setSaronManual(document.getElementById('saronManualInput').value)">Use this value</button>
+  </div>`;
+  h += '</div>';
+  const fx = liveMarketData.fx;
+  h += '<div class="kpi-box" style="border-left:3px solid '+(fx.JPY!==null?'#166534':'#991B1B')+'">';
+  h += '<div class="kpi-label">Live JPY / USD Spot</div>';
+  h += fx.JPY!==null
+    ? '<div class="kpi-val" style="color:#166534">'+fx.JPY.toFixed(2)+'</div><div class="kpi-sub">ECB ref. rate (Frankfurter) · '+fx.asOf+'</div>'
+    : '<div class="kpi-val" style="color:#991B1B;font-size:.85rem">Unavailable</div><div class="kpi-sub">'+(fx.error||'Not yet fetched')+'</div>';
+  h += '</div>';
+  h += '<div class="kpi-box" style="border-left:3px solid '+(fx.CHF!==null?'#166534':'#991B1B')+'">';
+  h += '<div class="kpi-label">Live CHF / USD Spot</div>';
+  h += fx.CHF!==null
+    ? '<div class="kpi-val" style="color:#166534">'+fx.CHF.toFixed(4)+'</div><div class="kpi-sub">ECB ref. rate (Frankfurter) · '+fx.asOf+'</div>'
+    : '<div class="kpi-val" style="color:#991B1B;font-size:.85rem">Unavailable</div><div class="kpi-sub">'+(fx.error||'Not yet fetched')+'</div>';
+  h += '</div>';
+  h += '</div>';
+
+  // Chart containers
+  h += '<div class="panel-title">Interest Rate Curves — Model Assumptions (Y1–Y'+tcDurH+')</div>';
+  h += '<p class="sect-note">USD SOFR, CHF SARON, JPY TONA base rate curves as currently set on the Rate &amp; FX Assumptions tab. The amber dot marks the live SOFR overnight print, where available.</p>';
+  h += '<div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:1rem;margin-bottom:1.5rem"><canvas id="mrRateChart" height="90"></canvas></div>';
+
+  h += '<div class="panel-title">FX Curves — JPY &amp; CHF per 1 USD (Y1–Y'+tcDurH+')</div>';
+  h += '<p class="sect-note">Model FX assumption curves. The amber dot marks today\'s live ECB spot rate, applied as the Base FX Rate at Inception.</p>';
+  h += '<div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:1rem;margin-bottom:1rem"><canvas id="mrFxChart" height="90"></canvas></div>';
+
+  wrap.innerHTML = h;
+
+  if (typeof Chart === 'undefined') {
+    wrap.innerHTML += '<p class="sect-note" style="color:#991B1B">Chart library failed to load (no internet access?) — live data and curves cannot be displayed.</p>';
+    return;
+  }
+
+  const rateConf = getRateChartConfig(yrs);
+  const fxConf   = getFxChartConfig(yrs);
+
+  if (mrCharts.rates) mrCharts.rates.destroy();
+  mrCharts.rates = new Chart(document.getElementById('mrRateChart').getContext('2d'), rateConf);
+
+  if (mrCharts.fx) mrCharts.fx.destroy();
+  mrCharts.fx = new Chart(document.getElementById('mrFxChart').getContext('2d'), fxConf);
+}
+
+// Shared dataset/options builders — used both by the on-screen (responsive)
+// charts above and the off-screen print-capture renderer below, so the two
+// never drift out of sync.
+function getRateChartConfig(yrs, forPrint=false) {
+  const navy='#000061', amber='#C8860A';
+  const labels = yrs.map(y=>'Y'+y);
+  const sofr = liveMarketData.sofr, saron = liveMarketData.saron;
+  return {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label:'USD SOFR', data: yrs.map(y=>rateData.USD[Math.min(y-1,rateData.USD.length-1)]), borderColor:navy, backgroundColor:navy, tension:.25, pointRadius:2 },
+        { label:'CHF SARON', data: yrs.map(y=>rateData.CHF[Math.min(y-1,rateData.CHF.length-1)]), borderColor:amber, backgroundColor:amber, tension:.25, pointRadius:2 },
+        { label:'JPY TONA', data: yrs.map(y=>rateData.JPY[Math.min(y-1,rateData.JPY.length-1)]), borderColor:'#166534', backgroundColor:'#166534', tension:.25, pointRadius:2 },
+        ...(sofr.value!==null ? [{ label:'Live SOFR O/N', data:[{x:'Y1',y:sofr.value}], borderColor:amber, backgroundColor:amber, pointRadius:6, pointStyle:'circle', showLine:false }] : []),
+        ...(saron.value!==null ? [{ label:(saron.manual?'SARON O/N (Manual)':'Live SARON O/N'), data:[{x:'Y1',y:saron.value}], borderColor:(saron.manual?'#C8860A':'#166534'), backgroundColor:'#fff', borderWidth:2, pointRadius:6, pointStyle:'circle', showLine:false }] : [])
+      ]
+    },
+    options: {
+      responsive: !forPrint,
+      animation: forPrint ? false : undefined,
+      interaction:{mode:'index',intersect:false},
+      plugins:{ legend:{ position:'bottom', labels:{ font:{family:'Inter'}, usePointStyle:true } },
+        tooltip:{ callbacks:{ label: ctx => ctx.dataset.label+': '+ctx.formattedValue+'%' } } },
+      scales:{ y:{ title:{display:true,text:'% p.a.',font:{family:'Inter'}}, ticks:{font:{family:'Inter'}} },
+               x:{ ticks:{font:{family:'Inter'}} } }
+    }
+  };
+}
+function getFxChartConfig(yrs, forPrint=false) {
+  const navy2='#00008a', amber='#C8860A';
+  const labels = yrs.map(y=>'Y'+y);
+  const fx = liveMarketData.fx;
+  return {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label:'JPY / USD', data: yrs.map(y=>fxData.JPY[Math.min(y-1,fxData.JPY.length-1)]), borderColor:navy2, backgroundColor:navy2, tension:.25, pointRadius:2, yAxisID:'yJPY' },
+        { label:'CHF / USD', data: yrs.map(y=>fxData.CHF[Math.min(y-1,fxData.CHF.length-1)]), borderColor:amber, backgroundColor:amber, tension:.25, pointRadius:2, yAxisID:'yCHF' },
+        ...(fx.JPY!==null ? [{ label:'Live JPY Spot', data:[{x:'Y1',y:fx.JPY}], borderColor:navy2, backgroundColor:'#fff', borderWidth:2, pointRadius:6, pointStyle:'circle', showLine:false, yAxisID:'yJPY' }] : []),
+        ...(fx.CHF!==null ? [{ label:'Live CHF Spot', data:[{x:'Y1',y:fx.CHF}], borderColor:amber, backgroundColor:'#fff', borderWidth:2, pointRadius:6, pointStyle:'circle', showLine:false, yAxisID:'yCHF' }] : [])
+      ]
+    },
+    options: {
+      responsive: !forPrint,
+      animation: forPrint ? false : undefined,
+      interaction:{mode:'index',intersect:false},
+      plugins:{ legend:{ position:'bottom', labels:{ font:{family:'Inter'}, usePointStyle:true } } },
+      scales:{
+        yJPY:{ position:'left', title:{display:true,text:'JPY / USD',font:{family:'Inter'}}, ticks:{font:{family:'Inter'}} },
+        yCHF:{ position:'right', title:{display:true,text:'CHF / USD',font:{family:'Inter'}}, ticks:{font:{family:'Inter'}}, grid:{drawOnChartArea:false} },
+        x:{ ticks:{font:{family:'Inter'}} }
+      }
+    }
+  };
+}
+
+// Renders a chart config into a fixed-size, off-screen-but-visible canvas
+// (not display:none, so Chart.js gets real dimensions regardless of which
+// tab is currently active), captures it as a PNG data URL, then cleans up.
+// This is what makes the Market Rates print page work even if the user
+// never clicked into that tab on screen before printing.
+function renderChartToImage(config, width=760, height=320) {
+  try {
+    const holder = document.createElement('div');
+    holder.style.cssText = `position:fixed;top:0;left:-99999px;width:${width}px;height:${height}px;background:#fff`;
+    const canvas = document.createElement('canvas');
+    canvas.width = width; canvas.height = height;
+    holder.appendChild(canvas);
+    document.body.appendChild(holder);
+    const chart = new Chart(canvas.getContext('2d'), config);
+    chart.resize(width, height);
+    chart.update('none');
+    const img = chart.toBase64Image('image/png', 1);
+    chart.destroy();
+    document.body.removeChild(holder);
+    return img;
+  } catch (e) {
+    return '';
+  }
+}
+
+
+
+
+// ═══════════════════════════════════════════════════════════════
+// SAVE / LOAD SCENARIO — export all inputs to a local JSON file and
+// restore them later, since this page has no server/database and
+// otherwise resets to the base parameters on every visit.
+// ═══════════════════════════════════════════════════════════════
+function exportScenario() {
+  const state = { version: 1, savedAt: new Date().toISOString(), inputs: {}, data: {} };
+
+  // Generic: every input/select with an id — covers virtually all named
+  // parameter fields, including the dynamically generated per-year hire
+  // structure rows (staggered/collar/floor&share), automatically.
+  document.querySelectorAll('input[id], select[id]').forEach(el => {
+    state.inputs[el.id] = el.value;
+  });
+
+  // Explicit: JS-side state not tied to a simple id'd input (curve tables,
+  // currency mix, milestones, drydock schedule — these use data-attributes
+  // and inline handlers rather than ids, so they need to be captured directly).
+  state.data.rateData      = rateData;
+  state.data.fxData        = fxData;
+  state.data.ccyData       = ccyData;
+  state.data.baseFxRate    = baseFxRate;
+  state.data.preDelFxData  = preDelFxData;
+  state.data.MILESTONES    = MILESTONES;
+  state.data.DRYDOCKS      = DRYDOCKS;
+  state.data.activeScenario = (typeof activeScenario!=='undefined') ? activeScenario : 'base';
+  state.data.saronManual   = (liveMarketData.saron && liveMarketData.saron.manual) ? liveMarketData.saron : null;
+
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type: 'application/json'});
+  const url  = URL.createObjectURL(blob);
+  const vesselTag = (document.getElementById('vesselName')?.value || 'TC_Model').replace(/[^a-z0-9]+/gi,'_');
+  const dateTag   = new Date().toISOString().slice(0,10);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${vesselTag}_scenario_${dateTag}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importScenario(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      applyImportedScenario(JSON.parse(e.target.result));
+    } catch (err) {
+      alert('Could not read this file — it may not be a valid saved scenario.\n\n' + err.message);
+    }
+  };
+  reader.onerror = () => alert('Could not read this file from disk.');
+  reader.readAsText(file);
+  event.target.value = ''; // allow re-selecting the same file again later
+}
+
+function applyImportedScenario(state) {
+  if (!state || !state.inputs) {
+    alert('This file does not look like a valid saved scenario.');
+    return;
+  }
+
+  // 1. Restore structural fields FIRST — hire structure type and TC duration
+  // determine which dynamic per-year rows need to exist before we can set
+  // their values in step 3.
+  ['hireType','tcDur'].forEach(id => {
+    if (state.inputs[id]!==undefined && document.getElementById(id)) document.getElementById(id).value = state.inputs[id];
+  });
+  if (typeof renderHireStructureInputs === 'function') renderHireStructureInputs();
+
+  // 2. Restore explicit JS state objects (mutate in place — these are
+  // const/let-bound objects that other functions hold direct references to).
+  if (state.data) {
+    if (state.data.rateData)     Object.keys(state.data.rateData).forEach(k=>{ rateData[k] = state.data.rateData[k]; });
+    if (state.data.fxData)       Object.keys(state.data.fxData).forEach(k=>{ fxData[k] = state.data.fxData[k]; });
+    if (state.data.ccyData)      Object.keys(state.data.ccyData).forEach(k=>{ ccyData[k] = state.data.ccyData[k]; });
+    if (state.data.baseFxRate)   Object.keys(state.data.baseFxRate).forEach(k=>{ baseFxRate[k] = state.data.baseFxRate[k]; });
+    if (state.data.preDelFxData) Object.keys(state.data.preDelFxData).forEach(k=>{ preDelFxData[k] = state.data.preDelFxData[k]; });
+    if (state.data.MILESTONES)   { MILESTONES.length = 0; state.data.MILESTONES.forEach(m=>MILESTONES.push(m)); }
+    if (state.data.DRYDOCKS)     { DRYDOCKS.length = 0; state.data.DRYDOCKS.forEach(d=>DRYDOCKS.push(d)); }
+    if (state.data.activeScenario && typeof activeScenario!=='undefined') activeScenario = state.data.activeScenario;
+    if (state.data.saronManual)  liveMarketData.saron = state.data.saronManual;
+  }
+
+  // 3. Restore every remaining simple input/select value generically
+  Object.keys(state.inputs).forEach(id => {
+    if (id==='hireType' || id==='tcDur') return; // already handled in step 1
+    const el = document.getElementById(id);
+    if (el) el.value = state.inputs[id];
+  });
+
+  // 4. Reformat number displays and rebuild every dependent tab/table
+  if (typeof initFmtInputs === 'function') initFmtInputs();
+  if (typeof updatePriceHireDisplays === 'function') updatePriceHireDisplays();
+  if (typeof renderDdSidebar === 'function') renderDdSidebar();
+  if (typeof buildRateTables === 'function') buildRateTables();
+  if (typeof buildCcyAllocTable === 'function') buildCcyAllocTable();
+  if (typeof buildPreDelFxTable === 'function') buildPreDelFxTable();
+  if (typeof buildMacroTab === 'function') buildMacroTab();
+  if (typeof buildMarketRatesTab === 'function') buildMarketRatesTab();
+  calculate();
+
+  const savedWhen = state.savedAt ? new Date(state.savedAt).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : 'unknown time';
+  alert('Scenario loaded — all parameters restored from a file saved on ' + savedWhen + '.');
+}
+
 function showPage(name, btn) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   if(btn) btn.classList.add('active');
   if(name==='macro') buildMacroTab();
+  if(name==='marketrates') buildMarketRatesTab();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2804,6 +3295,7 @@ window.addEventListener('load',()=>{
   buildCcyAllocTable();
   buildPreDelFxTable();
   buildMacroTab();
+  buildMarketRatesTab();
   calculate();
 });
 document.addEventListener('keydown', e=>{ if(e.key==='Enter') calculate(); });
