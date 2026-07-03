@@ -451,11 +451,11 @@ window.addEventListener('load', ()=>{
 
   <div class="params-hero">
     <div class="params-hero-text">
-      <strong>All model inputs live on this page.</strong> Edit any field below, then press <strong>Calculate</strong>
-      to run the model. Currency mix, spreads and 20-year rate/FX curves are on the
-      <strong>Rate &amp; FX Assumptions</strong> tab; the pre-delivery milestone schedule and macro scenarios have their own tabs too.
-      Use <strong>Save Scenario</strong> to download every input on this page (plus the rate curves, milestones and drydock
-      schedule) as a file you can keep and re-load later — this page doesn't remember anything between visits otherwise.
+      <strong>All model inputs live on this page.</strong> Edit any field below, then press <strong>Calculate</strong> to run the model.
+      Currency mix, spreads and 20-year rate/FX curves, pre-delivery milestone schedule and macro scenarios have their own tabs
+      for inputs/adjustments.<br>
+      This page does not remember anything between visits. Use <strong>Save Scenario</strong> to download every input on this
+      page and re-load later.
     </div>
     <div style="display:flex;flex-direction:column;gap:.5rem;align-items:flex-end">
       <button class="btn-calc-lg" onclick="calculate()">▶ Calculate</button>
@@ -633,10 +633,10 @@ window.addEventListener('load', ()=>{
     <div class="ir">
       <label>Structure Type</label>
       <select id="hireType" onchange="renderHireStructureInputs()">
-        <option value="flat">1. Fixed Flat</option>
-        <option value="staggered">2. Fixed Staggered</option>
-        <option value="collar">3. Floating Collar</option>
-        <option value="floorshare">4. Floating Floor &amp; Share</option>
+        <option value="flat">Fixed - Flat Hire</option>
+        <option value="staggered">Fixed - Staggered Hire</option>
+        <option value="collar">Floating - Collar</option>
+        <option value="floorshare">Floating - Floor &amp; Share</option>
       </select>
     </div>
 
@@ -3186,11 +3186,11 @@ function exportScenario() {
 
   const blob = new Blob([JSON.stringify(state, null, 2)], {type: 'application/json'});
   const url  = URL.createObjectURL(blob);
-  const vesselTag = (document.getElementById('vesselName')?.value || 'TC_Model').replace(/[^a-z0-9]+/gi,'_');
+  const vesselTag = (document.getElementById('vesselName')?.value || 'TC_Model').trim().replace(/[^a-z0-9]+/gi,'_').replace(/^_+|_+$/g,'') || 'TC_Model';
   const dateTag   = new Date().toISOString().slice(0,10);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${vesselTag}_scenario_${dateTag}.json`;
+  a.download = `${vesselTag}_${dateTag}.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
