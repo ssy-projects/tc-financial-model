@@ -711,35 +711,20 @@ window.addEventListener('load', ()=>{
       font-size:.68rem;padding:.3rem;cursor:pointer;letter-spacing:.08em">+ ADD EVENT</button>
   </div>
 
-  <div class="param-card param-card-wide" style="background:var(--navy);color:#E8F0FF;border:1px solid rgba(255,255,255,.15)">
+  <div class="param-card" style="background:var(--navy);color:#E8F0FF;border:1px solid rgba(255,255,255,.15)">
     <div class="sb-title">Bank Loan — Currency Allocation &amp; Spread</div>
-    <p class="sect-note" style="color:rgba(255,255,255,.4)!important">Set the % of total loan for each active currency (must sum to 100%), the bank spread over base rate, and the base FX rate at loan inception (used to compute FX gain/loss on principal &amp; interest as rates move). Defaults to USD / CHF 50:50 — add other currencies below if needed. Y1 base rate and all-in rate are set on the Rate &amp; FX Assumptions tab.</p>
-    <div class="tbl-wrap">
-      <table class="ccy-alloc-table" id="ccyAllocTable">
-        <thead>
-          <tr>
-            <th>Currency</th>
-            <th>% of Loan</th>
-            <th>Spread (bps)</th>
-            <th>Base FX Rate<br><span style="font-size:.58rem;font-weight:400;opacity:.75">(at Inception)</span></th>
-            <th>Loan Amount (USD)</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="ccyAllocBody"></tbody>
-        <tfoot>
-          <tr class="ccy-total-row">
-            <td>TOTAL</td>
-            <td id="ccyPctTotal" style="text-align:center">100%</td>
-            <td>—</td><td>—</td>
-            <td id="ccyLoanTotal" style="text-align:right;font-family:'Inter',sans-serif">—</td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
+    <div class="i2" style="grid-template-columns:1fr 1fr 1fr 1fr;gap:.3rem;margin-bottom:.3rem">
+      <div style="font-size:.6rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.05em">Ccy</div>
+      <div style="font-size:.6rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.05em;text-align:center">% Loan</div>
+      <div style="font-size:.6rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.05em;text-align:center">Spread</div>
+      <div style="font-size:.6rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.05em;text-align:center">Base FX</div>
     </div>
-    <div id="ccyAddWrap" style="display:flex;gap:.5rem;align-items:center;margin-top:.6rem"></div>
-    <p class="sect-note" style="color:rgba(255,255,255,.4)!important;margin-top:.6rem;margin-bottom:0">→ 20-year rate/FX curves and pre-delivery FX assumptions are on the <strong>Rate &amp; FX Assumptions</strong> tab.</p>
+    <div id="ccyAllocBody"></div>
+    <div class="ir" style="margin-top:.4rem;display:flex;flex-direction:row;justify-content:space-between;align-items:center">
+      <label style="margin:0">Total</label>
+      <div id="ccyPctTotal" style="font-family:'Inter',sans-serif;font-weight:700">100%</div>
+    </div>
+    <div id="ccyAddWrap" style="display:flex;gap:.4rem;align-items:center;margin-top:.5rem"></div>
   </div>
 
   </div><!-- /.params-grid -->
@@ -1354,34 +1339,36 @@ function buildEditableTable(id, data, onchange, dpFn, lockFn) {
 // RENDER CURRENCY ALLOCATION TABLE
 // ═══════════════════════════════════════════════════════════════
 function buildCcyAllocTable() {
-  const tbody = document.getElementById('ccyAllocBody');
-  tbody.innerHTML = '';
-  CCYS.filter(c=>ccyEnabled[c]).forEach(ccy=>{
-    const tr = tbody.insertRow();
+  const body = document.getElementById('ccyAllocBody');
+  body.innerHTML = '';
+  const active = CCYS.filter(c=>ccyEnabled[c]);
+  active.forEach(ccy=>{
     const isUSD = ccy==='USD';
     const fxDec = ccy==='JPY' ? 0 : 3;
-    const canRemove = CCYS.filter(c=>ccyEnabled[c]).length > 1;
-    tr.innerHTML = `
-      <td>${ccy} — ${CCY_NAMES[ccy]}</td>
-      <td style="text-align:center"><input class="ccy-pct-inp" data-ccy="${ccy}" type="number" min="0" max="100" step="5"
-        value="${ccyData[ccy].pct}" style="width:70px;border:1px solid #3A5A9A;font-family:'Inter',sans-serif;
-        font-size:.82rem;padding:.28rem .4rem;text-align:right;outline:none;background:#0A1F4A;color:#E8F0FF;font-weight:700"
-        oninput="ccyData['${ccy}'].pct=parseFloat(this.value)||0;updateCcyTotals()"></td>
-      <td style="text-align:center"><input class="ccy-sprd-inp" data-ccy="${ccy}" type="number" min="0" step="10"
-        value="${ccyData[ccy].spread}" style="width:70px;border:1px solid #3A5A9A;font-family:'Inter',sans-serif;
-        font-size:.82rem;padding:.28rem .4rem;text-align:right;outline:none;background:#0A1F4A;color:#E8F0FF;font-weight:700"
-        oninput="ccyData['${ccy}'].spread=parseFloat(this.value)||0;updateCcyTotals()"></td>
-      <td style="text-align:center">${isUSD
-        ? '<span style="opacity:.5">1.000 (fixed)</span>'
+    const canRemove = active.length > 1 && !isUSD;
+    const row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.3rem;align-items:center;margin-bottom:.35rem';
+    row.innerHTML = `
+      <div style="display:flex;align-items:center;gap:.3rem;font-family:'Inter',sans-serif;font-size:.78rem;font-weight:700">
+        ${ccy}${canRemove ? `<button onclick="removeCurrencyFromLoan('${ccy}')" title="Remove"
+          style="background:rgba(180,0,0,.3);border:1px solid rgba(255,100,100,.3);color:rgba(255,150,150,.8);
+          font-size:.62rem;padding:.05rem .3rem;cursor:pointer;font-family:'Inter',sans-serif;line-height:1">✕</button>` : ''}
+      </div>
+      <input class="ccy-pct-inp" data-ccy="${ccy}" type="number" min="0" max="100" step="5"
+        value="${ccyData[ccy].pct}" style="width:100%;border:1px solid #3A5A9A;font-family:'Inter',sans-serif;
+        font-size:.78rem;padding:.26rem .3rem;text-align:center;outline:none;background:#0A1F4A;color:#E8F0FF;font-weight:700"
+        oninput="ccyData['${ccy}'].pct=parseFloat(this.value)||0;updateCcyTotals()">
+      <input class="ccy-sprd-inp" data-ccy="${ccy}" type="number" min="0" step="10"
+        value="${ccyData[ccy].spread}" style="width:100%;border:1px solid #3A5A9A;font-family:'Inter',sans-serif;
+        font-size:.78rem;padding:.26rem .3rem;text-align:center;outline:none;background:#0A1F4A;color:#E8F0FF;font-weight:700"
+        oninput="ccyData['${ccy}'].spread=parseFloat(this.value)||0;updateCcyTotals()">
+      ${isUSD
+        ? '<span style="font-size:.72rem;opacity:.5;text-align:center">1.000</span>'
         : `<input class="ccy-basefx-inp" data-ccy="${ccy}" type="number" min="0" step="${fxDec===0?'1':'0.001'}"
-             value="${baseFxRate[ccy].toFixed(fxDec)}" style="width:80px;border:1px solid #3A5A9A;font-family:'Inter',sans-serif;
-             font-size:.82rem;padding:.28rem .4rem;text-align:right;outline:none;background:#0A1F4A;color:#E8F0FF;font-weight:700"
-             oninput="baseFxRate['${ccy}']=parseFloat(this.value)||baseFxRate['${ccy}'];updateCcyTotals()">`}</td>
-      <td id="ccyLoanAmt_${ccy}" style="text-align:right;font-family:'Inter',sans-serif">—</td>
-      <td style="text-align:center">${canRemove && !isUSD
-        ? `<button onclick="removeCurrencyFromLoan('${ccy}')" style="background:rgba(180,0,0,.3);border:1px solid rgba(255,100,100,.3);
-             color:rgba(255,150,150,.8);font-size:.72rem;padding:.2rem .5rem;cursor:pointer;font-family:'Inter',sans-serif">✕</button>`
-        : ''}</td>`;
+             value="${baseFxRate[ccy].toFixed(fxDec)}" style="width:100%;border:1px solid #3A5A9A;font-family:'Inter',sans-serif;
+             font-size:.78rem;padding:.26rem .3rem;text-align:center;outline:none;background:#0A1F4A;color:#E8F0FF;font-weight:700"
+             oninput="baseFxRate['${ccy}']=parseFloat(this.value)||baseFxRate['${ccy}'];updateCcyTotals()">`}`;
+    body.appendChild(row);
   });
 
   // "+ Add Currency" control for disabled currencies
@@ -1393,12 +1380,12 @@ function buildCcyAllocTable() {
     } else {
       addWrap.innerHTML = `
         <select id="ccyAddSelect" style="background:#0A1F4A;border:1px solid #3A5A9A;color:#E8F0FF;
-          font-family:'Inter',sans-serif;font-size:.78rem;padding:.32rem .5rem">
-          ${disabled.map(c=>`<option value="${c}">${c} — ${CCY_NAMES[c]}</option>`).join('')}
+          font-family:'Inter',sans-serif;font-size:.72rem;padding:.28rem .4rem">
+          ${disabled.map(c=>`<option value="${c}">${c}</option>`).join('')}
         </select>
         <button onclick="addCurrencyToLoan(document.getElementById('ccyAddSelect').value)"
           style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.25);color:#E8F0FF;
-          font-family:'Inter',sans-serif;font-size:.72rem;padding:.32rem .7rem;cursor:pointer;letter-spacing:.06em">+ ADD CURRENCY</button>`;
+          font-family:'Inter',sans-serif;font-size:.68rem;padding:.28rem .6rem;cursor:pointer;letter-spacing:.05em">+ ADD</button>`;
     }
   }
   updateCcyTotals();
@@ -1417,23 +1404,13 @@ function removeCurrencyFromLoan(ccy) {
 }
 
 function updateCcyTotals() {
-  const bankLoan = totalVesselPriceUSD() * v('ltv')/100;
-  let totalPct=0, totalLoan=0;
-  CCYS.filter(c=>ccyEnabled[c]).forEach(ccy=>{
-    const pct = ccyData[ccy].pct;
-    totalPct += pct;
-    const loanAmt = bankLoan * pct/100;
-    totalLoan += loanAmt;
-    const e2=document.getElementById('ccyLoanAmt_'+ccy);
-    if(e2) e2.textContent = pct>0?fmtU(loanAmt):'—';
-  });
+  let totalPct=0;
+  CCYS.filter(c=>ccyEnabled[c]).forEach(ccy=>{ totalPct += ccyData[ccy].pct; });
   const totEl = document.getElementById('ccyPctTotal');
-  const totLoanEl = document.getElementById('ccyLoanTotal');
   if(totEl){
     totEl.textContent = totalPct.toFixed(0)+'%';
-    totEl.className = Math.abs(totalPct-100)<0.1?'total-ok':'total-warn';
+    totEl.style.color = Math.abs(totalPct-100)<0.1 ? '#6EE7B7' : '#F87171';
   }
-  if(totLoanEl) totLoanEl.textContent = fmtU(totalLoan);
 }
 
 // ═══════════════════════════════════════════════════════════════
