@@ -4,18 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SSY PROJECTS | Time Charter - Financial Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=block" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --navy:#000061;--navy2:#00008a;--amber:#C8860A;--amber2:#E8A020;
   --white:#F8F7F4;--ink:#1A1A2E;--mid:#6B7280;--border:#D1CFC8;
   --row-alt:#F4F2EE;--lgrey:#E8E6E0;
   --inp-bg:#0A1F4A;--inp-color:#E8F0FF;--inp-border:#3A5A9A;
+  --font-stack:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
 }
 html{font-size:15px;scroll-behavior:smooth}
-body{background:#FFFFFF;color:var(--ink);font-family:'Inter',sans-serif;font-weight:400;line-height:1.55}
+body{background:#FFFFFF;color:var(--ink);font-family:var(--font-stack);font-weight:400;line-height:1.55}
 
 /* ── Global editable input style ── */
 /* Main content inputs use dark navy — visible on white background */
@@ -35,19 +37,19 @@ main .param-card .ccy-alloc-table input[type=number] { color: #000061 !important
 /* ── Header ── */
 header{background:var(--navy);color:#fff;padding:0 1.5rem;display:flex;align-items:center;
   justify-content:space-between;height:104px;position:sticky;top:0;z-index:200;border-bottom:2px solid var(--amber)}
-.logo{font-family:'Inter',sans-serif;font-size:1.6rem;font-weight:700;letter-spacing:.08em;color:var(--amber2);text-transform:uppercase}
-.header-title{font-family:'Inter',sans-serif;font-size:1.5rem;font-weight:600;color:rgba(255,255,255,.55);border-left:1px solid rgba(255,255,255,.2);padding-left:1.25rem;margin-left:1.25rem;letter-spacing:.04em}
+.logo{font-family:var(--font-stack);font-size:1.6rem;font-weight:700;letter-spacing:.08em;color:var(--amber2);text-transform:uppercase}
+.header-title{font-family:var(--font-stack);font-size:1.5rem;font-weight:600;color:rgba(255,255,255,.55);border-left:1px solid rgba(255,255,255,.2);padding-left:1.25rem;margin-left:1.25rem;letter-spacing:.04em}
 .header-right{display:flex;gap:.5rem}
 .btn-hdr{background:transparent;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.25);padding:.35rem .9rem;
-  font-family:'Inter',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.1em;cursor:pointer;text-transform:uppercase;transition:all .15s}
+  font-family:var(--font-stack);font-size:.7rem;font-weight:600;letter-spacing:.1em;cursor:pointer;text-transform:uppercase;transition:all .15s}
 .btn-hdr:hover,.btn-hdr.active{background:var(--amber);color:#fff;border-color:var(--amber)}
 .btn-print{background:var(--amber);color:#fff;border:none;padding:.35rem .9rem;
-  font-family:'Inter',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.1em;cursor:pointer;text-transform:uppercase}
+  font-family:var(--font-stack);font-size:.7rem;font-weight:600;letter-spacing:.1em;cursor:pointer;text-transform:uppercase}
 .btn-print:hover{background:var(--amber2)}
 
 /* ── Tab nav ── */
 .tab-nav{display:flex;background:var(--navy);border-bottom:1px solid rgba(255,255,255,.1);padding:0 1.5rem}
-.tab-btn{background:none;border:none;color:rgba(255,255,255,.5);font-family:'Inter',sans-serif;
+.tab-btn{background:none;border:none;color:rgba(255,255,255,.5);font-family:var(--font-stack);
   font-size:.816rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:.6rem 1.1rem;
   cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
 .tab-btn:hover{color:rgba(255,255,255,.8)}
@@ -59,17 +61,17 @@ main{overflow-y:auto;background:#FFFFFF;padding:1.5rem 1.75rem 3rem}
 
 /* ── Sidebar-style classes (reused inside Parameters tab cards) ── */
 .sb-sec{border-bottom:1px solid rgba(255,255,255,.08);padding:.9rem 1.1rem}
-.sb-title{font-family:'Inter',sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.15em;
+.sb-title{font-family:var(--font-stack);font-size:.62rem;font-weight:600;letter-spacing:.15em;
   text-transform:uppercase;color:var(--amber2);margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid rgba(200,134,10,.3)}
 .ir{display:flex;flex-direction:column;gap:.12rem;margin-bottom:.55rem}
 .ir label{font-size:.72rem;color:rgba(255,255,255,.6);font-weight:400;letter-spacing:.01em}
 .ir input,.ir select{background:var(--inp-bg);border:1px solid var(--inp-border);color:var(--inp-color);
-  font-family:'Inter',sans-serif;font-size:.78rem;padding:.32rem .55rem;width:100%;outline:none;transition:border-color .15s;font-weight:500}
+  font-family:var(--font-stack);font-size:.78rem;padding:.32rem .55rem;width:100%;outline:none;transition:border-color .15s;font-weight:500}
 .ir input:focus,.ir select:focus{border-color:var(--amber2);background:#0d2660;outline:1px solid var(--amber2)}
 .ir select option{background:var(--navy)}
 .i2{display:grid;grid-template-columns:1fr 1fr;gap:.45rem}
 .btn-calc{width:100%;background:var(--amber);color:#fff;border:none;padding:.65rem;
-  font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.12em;
+  font-family:var(--font-stack);font-size:.78rem;font-weight:600;letter-spacing:.12em;
   text-transform:uppercase;cursor:pointer;margin-top:.4rem;transition:background .15s}
 .btn-calc:hover{background:var(--amber2)}
 
@@ -80,7 +82,7 @@ main{overflow-y:auto;background:#FFFFFF;padding:1.5rem 1.75rem 3rem}
 .params-hero-text{color:rgba(255,255,255,.85);font-size:.874rem;line-height:1.5;max-width:640px}
 .params-hero-text strong{color:var(--amber2)}
 .btn-calc-lg{background:var(--amber);color:#fff;border:none;padding:.72rem 1.76rem;
-  font-family:'Inter',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:.08em;
+  font-family:var(--font-stack);font-size:.8rem;font-weight:700;letter-spacing:.08em;
   text-transform:uppercase;cursor:pointer;border-radius:4px;transition:background .15s;white-space:nowrap}
 .btn-calc-lg:hover{background:var(--amber2)}
 .params-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.1rem;margin-bottom:1.4rem}
@@ -97,25 +99,25 @@ main{overflow-y:auto;background:#FFFFFF;padding:1.5rem 1.75rem 3rem}
 /* ── Gauge ── */
 .gauge-panel{display:grid;grid-template-columns:auto 1fr auto;gap:1.25rem;align-items:center;
   background:var(--navy);color:#fff;padding:1.1rem 1.5rem;margin-bottom:1.5rem;border-left:4px solid var(--amber)}
-.irr-value{font-family:'Inter',sans-serif;font-size:3rem;font-weight:600;color:var(--amber2);
+.irr-value{font-family:var(--font-stack);font-size:3rem;font-weight:600;color:var(--amber2);
   line-height:1;letter-spacing:-.02em;transition:color .4s}
 .irr-label{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:.2rem}
 .gauge-track{height:7px;background:rgba(255,255,255,.1);position:relative;overflow:hidden;margin:.35rem 0}
 .gauge-fill{height:100%;background:linear-gradient(90deg,var(--amber) 0%,var(--amber2) 100%);width:0%;transition:width .6s cubic-bezier(.4,0,.2,1)}
-.gauge-marks{display:flex;justify-content:space-between;font-family:'Inter',sans-serif;font-size:.58rem;color:rgba(255,255,255,.3)}
+.gauge-marks{display:flex;justify-content:space-between;font-family:var(--font-stack);font-size:.58rem;color:rgba(255,255,255,.3)}
 .gauge-metrics{display:grid;grid-template-rows:repeat(3,1fr);gap:.35rem;text-align:right}
 .gauge-metric{font-size:.68rem}
-.gauge-metric span{font-family:'Inter',sans-serif;font-weight:500;color:var(--amber2);margin-left:.4rem}
+.gauge-metric span{font-family:var(--font-stack);font-weight:500;color:var(--amber2);margin-left:.4rem}
 
 /* ── KPI strip ── */
 .kpi-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1.5rem}
 .kpi-box{background:#EAF2FB;padding:.75rem .9rem;border:1px solid #C7DCF0;border-radius:4px}
 .kpi-label{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.2rem;font-weight:700}
-.kpi-val{font-family:'Inter',sans-serif;font-size:1.1rem;font-weight:700;color:var(--navy)}
+.kpi-val{font-family:var(--font-stack);font-size:1.1rem;font-weight:700;color:var(--navy)}
 .kpi-sub{font-size:.62rem;color:var(--mid);margin-top:.1rem}
 
 /* ── Panel titles ── */
-.panel-title{font-family:'Inter',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.15em;
+.panel-title{font-family:var(--font-stack);font-size:.72rem;font-weight:600;letter-spacing:.15em;
   text-transform:uppercase;color:var(--navy);border-bottom:2px solid var(--navy);padding-bottom:.35rem;
   margin-bottom:.9rem;margin-top:1.5rem}
 .panel-title:first-of-type{margin-top:0}
@@ -127,29 +129,29 @@ table{width:100%;border-collapse:collapse;font-size:.84rem}
 #paramsTable table td:nth-child(2),
 #paramsTable table td:nth-child(4){text-align:left!important;padding-left:.6rem!important}
 #equityWaterfall td:nth-child(3){text-align:left!important}
-th{background:var(--navy);color:#fff;font-family:'Inter',sans-serif;font-size:.72rem;
+th{background:var(--navy);color:#fff;font-family:var(--font-stack);font-size:.72rem;
   font-weight:500;letter-spacing:.06em;padding:.5rem .75rem;text-align:right;white-space:nowrap}
 th:first-child{text-align:left}
 td{padding:.42rem .75rem;border-bottom:1px solid var(--border);text-align:right;
-  font-family:'Inter',sans-serif;font-size:.82rem;white-space:nowrap}
-td:first-child{text-align:left;font-family:'Inter',sans-serif;font-size:.82rem}
+  font-family:var(--font-stack);font-size:.82rem;white-space:nowrap}
+td:first-child{text-align:left;font-family:var(--font-stack);font-size:.82rem}
 tr:nth-child(even) td{background:var(--row-alt)}
 tr.subtotal td{background:#E8E6E0;font-weight:500}
 tr.total td{background:var(--navy);color:#fff;font-weight:600}
 tr.highlight td{background:#FFF3CD;color:var(--navy);font-weight:600}
-tr.section-hdr td{background:var(--navy);color:rgba(255,255,255,.8);font-family:'Inter',sans-serif;
+tr.section-hdr td{background:var(--navy);color:rgba(255,255,255,.8);font-family:var(--font-stack);
   font-size:.63rem;letter-spacing:.08em;text-transform:uppercase;padding:.35rem .7rem}
 
 /* ── Editable rate/FX table ── */
 .rate-table-wrap{overflow-x:auto;margin-bottom:.75rem}
 .rate-tbl{border-collapse:collapse;font-size:.80rem;width:100%}
-.rate-tbl th{background:var(--navy);color:#fff;font-family:'Inter',sans-serif;
+.rate-tbl th{background:var(--navy);color:#fff;font-family:var(--font-stack);
   font-size:.68rem;font-weight:500;letter-spacing:.06em;padding:.42rem .55rem;text-align:center;white-space:nowrap}
 .rate-tbl th.lbl-col{text-align:left;min-width:160px}
 .rate-tbl td{padding:.22rem .32rem;border:1px solid #E2E0DC;background:#FFFFFF}
-.rate-tbl td.row-lbl{background:var(--navy);color:rgba(255,255,255,.88);font-family:'Inter',sans-serif;
+.rate-tbl td.row-lbl{background:var(--navy);color:rgba(255,255,255,.88);font-family:var(--font-stack);
   font-size:.72rem;padding:.38rem .55rem;text-align:left;white-space:nowrap;font-weight:500}
-.rate-tbl input{width:100%;border:none;outline:none;font-family:'Inter',sans-serif;
+.rate-tbl input{width:100%;border:none;outline:none;font-family:var(--font-stack);
   font-size:.80rem;padding:.28rem .35rem;text-align:right;background:transparent;color:#000061;font-weight:600}
 .rate-tbl input:focus{background:#FFFBF0;outline:1px solid var(--amber)}
 .rate-tbl input[readonly]{color:#999;font-weight:400}
@@ -158,27 +160,27 @@ tr.section-hdr td{background:var(--navy);color:rgba(255,255,255,.8);font-family:
 
 /* ── Currency allocation table ── */
 .ccy-alloc-table{width:100%;border-collapse:collapse;font-size:.84rem;margin-bottom:.75rem}
-.ccy-alloc-table th{background:var(--navy);color:#fff;font-family:'Inter',sans-serif;
+.ccy-alloc-table th{background:var(--navy);color:#fff;font-family:var(--font-stack);
   font-size:.70rem;letter-spacing:.06em;padding:.45rem .65rem;text-align:center}
 .ccy-alloc-table th:first-child{text-align:left}
 .ccy-alloc-table td{padding:.32rem .5rem;border:1px solid var(--border);text-align:center;background:#FFFFFF}
-.ccy-alloc-table td:first-child{text-align:left;font-weight:600;font-family:'Inter',sans-serif;background:var(--navy);color:rgba(255,255,255,.88)}
-.ccy-alloc-table input{width:90px;border:1px solid #D1CFC8;outline:none;font-family:'Inter',sans-serif;
+.ccy-alloc-table td:first-child{text-align:left;font-weight:600;font-family:var(--font-stack);background:var(--navy);color:rgba(255,255,255,.88)}
+.ccy-alloc-table input{width:90px;border:1px solid #D1CFC8;outline:none;font-family:var(--font-stack);
   font-size:.82rem;padding:.3rem .4rem;text-align:right;background:#EEF2FF;color:#000061;font-weight:700}
 .ccy-alloc-table input:focus{background:#FFF3D0;border-color:var(--amber);outline:none}
-.ccy-total-row td{background:#F4F2EE!important;font-weight:700;font-family:'Inter',sans-serif}
+.ccy-total-row td{background:#F4F2EE!important;font-weight:700;font-family:var(--font-stack)}
 .ccy-total-row td:first-child{background:var(--navy)!important;color:#fff!important}
 .total-ok{color:#166534;font-weight:700}
 .total-warn{color:#991B1B;font-weight:700}
 
 /* ── Milestone table ── */
 .ms-table{width:100%;border-collapse:collapse;font-size:.76rem;margin-bottom:1rem}
-.ms-table th{background:var(--navy);color:#fff;font-family:'Inter',sans-serif;
+.ms-table th{background:var(--navy);color:#fff;font-family:var(--font-stack);
   font-size:.65rem;font-weight:500;letter-spacing:.06em;padding:.45rem .7rem;text-align:center;white-space:nowrap}
 .ms-table th:first-child{text-align:left}
 .ms-table td{padding:.45rem .7rem;border-bottom:1px solid var(--border);text-align:center;
-  font-family:'Inter',sans-serif;font-size:.74rem;white-space:nowrap}
-.ms-table td:first-child{text-align:left;font-family:'Inter',sans-serif}
+  font-family:var(--font-stack);font-size:.74rem;white-space:nowrap}
+.ms-table td:first-child{text-align:left;font-family:var(--font-stack)}
 .ms-table tr:nth-child(even) td{background:var(--row-alt)}
 .ms-highlight td{background:#FFF3CD!important;font-weight:600}
 .ms-delivery td{background:var(--navy)!important;color:#fff!important}
@@ -186,11 +188,11 @@ tr.section-hdr td{background:var(--navy);color:rgba(255,255,255,.8);font-family:
 /* ── Sensitivity tables ── */
 .sens-wrap{overflow-x:auto;margin-bottom:1rem}
 .sens-tbl{border-collapse:collapse;font-size:.80rem}
-.sens-tbl th{background:var(--navy);color:#fff;font-family:'Inter',sans-serif;
+.sens-tbl th{background:var(--navy);color:#fff;font-family:var(--font-stack);
   font-size:.70rem;padding:.42rem .65rem;text-align:center;white-space:nowrap}
 .sens-tbl th.row-hdr{text-align:left;min-width:110px}
 .sens-tbl th.row-val{background:#0a2d7a;min-width:75px;text-align:right}
-.sens-tbl td{padding:.38rem .65rem;text-align:center;font-family:'Inter',sans-serif;
+.sens-tbl td{padding:.38rem .65rem;text-align:center;font-family:var(--font-stack);
   font-size:.80rem;font-weight:600;border:1px solid #E2E0DC;min-width:75px;white-space:nowrap}
 .sens-tbl td.row-lbl{background:var(--navy);color:rgba(255,255,255,.85);font-size:.72rem;
   text-align:right;padding-right:.75rem;border-color:rgba(255,255,255,.15)}
@@ -212,9 +214,9 @@ tr.section-hdr td{background:var(--navy);color:rgba(255,255,255,.8);font-family:
   border-top:3px solid var(--navy);border-radius:4px;padding:.7rem .8rem}
 .tl-item.delivery{border-top:3px solid var(--amber);background:#FFF8EC}
 .tl-item.signing{border-top:3px solid var(--navy2)}
-.tl-milestone{font-family:'Inter',sans-serif;font-size:.72rem;font-weight:600;color:var(--navy)}
+.tl-milestone{font-family:var(--font-stack);font-size:.72rem;font-weight:600;color:var(--navy)}
 .tl-date{font-size:.68rem;color:var(--mid);margin-top:.2rem}
-.tl-amount{font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;color:var(--amber);margin-top:.35rem}
+.tl-amount{font-family:var(--font-stack);font-size:.78rem;font-weight:600;color:var(--amber);margin-top:.35rem}
 .tl-interest{font-size:.65rem;color:var(--mid);font-style:italic;margin-top:.2rem}
 
 /* ── Page tabs (main area) ── */
@@ -222,82 +224,87 @@ tr.section-hdr td{background:var(--navy);color:rgba(255,255,255,.8);font-family:
 
 /* ── Print ── */
 @media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  html,body{font-family:var(--font-stack)!important}
   header,.tab-nav,.app{display:none!important}
-  #print-root{display:block!important}
+  #print-root{display:block!important;font-family:var(--font-stack)}
   @page{margin:1.4cm 1.6cm;size:A4 landscape}
-  .pp{display:block;page-break-after:always;page-break-inside:avoid}
+  .pp{display:block;page-break-after:always;page-break-inside:avoid;orphans:3;widows:3}
   .pp:last-child{page-break-after:auto}
+  table{font-variant-numeric:tabular-nums}
   /* header band */
   .ph{background:#000061!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;
     padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;border-bottom:2px solid #E8A020!important}
   .ph-logo{height:38px;width:auto;display:block}
   .ph-brand{display:flex;align-items:center;gap:.7rem}
   .ph-divider{width:1px;height:32px;background:rgba(255,255,255,.25)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .ph-title{font-family:'Inter',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#E8A020!important}
-  .ph-sub{font-size:.72rem;color:#fff!important;margin-top:.1rem}
-  .ph-right{font-family:'Inter',sans-serif;font-size:.7rem;color:#fff!important;text-align:right;line-height:1.6}
+  .ph-title{font-family:var(--font-stack);font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#E8A020!important}
+  .ph-sub{font-size:.74rem;font-weight:400;color:#fff!important;margin-top:.15rem;letter-spacing:.01em}
+  .ph-right{font-family:var(--font-stack);font-size:.7rem;font-weight:400;color:#fff!important;text-align:right;line-height:1.65;letter-spacing:.01em}
   /* section title */
-  .ps{font-family:'Inter',sans-serif;font-size:.64rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
-    color:#000061!important;border-bottom:1.5px solid #000061;padding-bottom:.2rem;margin:.65rem 0 .4rem}
+  .ps{font-family:var(--font-stack);font-size:.66rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:#000061!important;border-bottom:1.5px solid #C8860A;padding-bottom:.25rem;margin:.75rem 0 .45rem}
   /* param tables */
-  .pg{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
-  .pt{width:100%;border-collapse:collapse;font-size:.71rem;break-inside:avoid;margin-bottom:.4rem}
+  .pg{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+  .pt{width:100%;border-collapse:collapse;font-size:.72rem;break-inside:avoid;margin-bottom:.4rem;font-variant-numeric:tabular-nums}
   .pt th{background:#000061!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;
-    font-family:'Inter',sans-serif;font-size:.63rem;font-weight:600;letter-spacing:.08em;padding:.35rem .6rem;text-align:left}
-  .pt td{padding:.3rem .6rem;border-bottom:1px solid #E0DDD8;font-size:.7rem;vertical-align:top}
-  .pt td:first-child{color:#444;width:54%}
-  .pt td:last-child{font-family:'Inter',sans-serif;font-weight:600;color:#000061!important;text-align:right}
-  .pt tr:nth-child(even) td{background:#F4F2EE!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .pt tr.pt-hi td{background:#FFF3CD!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-weight:700}
-  .pt tr.pt-sec td{background:#E8EBF2!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;
-    font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.08em;color:#000061!important;text-transform:uppercase}
+    font-family:var(--font-stack);font-size:.64rem;font-weight:600;letter-spacing:.09em;padding:.4rem .65rem;text-align:left;text-transform:uppercase}
+  .pt td{padding:.33rem .65rem;border-bottom:1px solid #E0DDD8;font-size:.72rem;vertical-align:top;line-height:1.35}
+  .pt td:first-child{color:#333;width:54%;font-weight:400}
+  .pt td:last-child{font-family:var(--font-stack);font-weight:600;color:#000061!important;text-align:right;font-variant-numeric:tabular-nums}
+  .pt tr:nth-child(even) td{background:#F5F3EF!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pt tr.pt-hi td{background:#FBEFC4!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-weight:700}
+  .pt tr.pt-hi td:first-child{color:#000061!important}
+  .pt tr.pt-sec td{background:#E4E8F1!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;
+    font-family:var(--font-stack);font-size:.6rem;font-weight:700;letter-spacing:.1em;color:#000061!important;text-transform:uppercase;padding:.34rem .65rem}
   /* IRR hero */
   .irr-hero{display:flex;align-items:center;background:#000061!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;
-    padding:.65rem 1.2rem;margin-bottom:.7rem;border-left:5px solid #C8860A;gap:2rem}
-  .irr-hero-num{font-family:'Inter',sans-serif;font-size:2.8rem;font-weight:700;color:#E8A020!important;line-height:1}
-  .irr-hero-lbl{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#fff!important;margin-top:.15rem}
-  .irr-metrics{display:flex;gap:2.5rem;flex:1}
-  .irr-metric{display:flex;flex-direction:column;gap:.1rem}
-  .irr-metric-lbl{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:#fff!important}
-  .irr-metric-val{font-family:'Inter',sans-serif;font-size:.9rem;font-weight:600;color:#E8A020!important}
+    padding:.75rem 1.3rem;margin-bottom:.75rem;border-left:5px solid #C8860A;gap:2.2rem;border-radius:2px}
+  .irr-hero-num{font-family:var(--font-stack);font-size:2.9rem;font-weight:800;color:#E8A020!important;line-height:1;font-variant-numeric:tabular-nums}
+  .irr-hero-lbl{font-size:.66rem;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:#fff!important;margin-top:.25rem}
+  .irr-metrics{display:flex;gap:2.6rem;flex:1}
+  .irr-metric{display:flex;flex-direction:column;gap:.15rem}
+  .irr-metric-lbl{font-size:.64rem;font-weight:500;letter-spacing:.11em;text-transform:uppercase;color:#fff!important}
+  .irr-metric-val{font-family:var(--font-stack);font-size:.95rem;font-weight:700;color:#E8A020!important;font-variant-numeric:tabular-nums}
   /* KPI bar */
-  .kpi-bar{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:#D1CFC8;border:1px solid #D1CFC8;margin-bottom:.6rem;break-inside:avoid}
-  .kpi-b{background:#fff!important;padding:.45rem .65rem;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .kpi-b-lbl{font-size:.62rem;letter-spacing:.09em;text-transform:uppercase;color:#6B7280;margin-bottom:.1rem}
-  .kpi-b-val{font-family:'Inter',sans-serif;font-size:.85rem;font-weight:700;color:#000061!important}
+  .kpi-bar{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:#C8C6C0;border:1px solid #C8C6C0;margin-bottom:.65rem;break-inside:avoid}
+  .kpi-b{background:#fff!important;padding:.5rem .7rem;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .kpi-b-lbl{font-size:.6rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#5B6472;margin-bottom:.15rem}
+  .kpi-b-val{font-family:var(--font-stack);font-size:.9rem;font-weight:700;color:#000061!important;font-variant-numeric:tabular-nums}
   /* FCF table */
-  .pf{width:100%;border-collapse:collapse;font-size:.69rem;break-inside:avoid}
+  .pf{width:100%;border-collapse:collapse;font-size:.7rem;break-inside:avoid;font-variant-numeric:tabular-nums}
   .pf th{background:#000061!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;
-    font-family:'Inter',sans-serif;font-size:.63rem;font-weight:600;letter-spacing:.06em;padding:.37rem .55rem;text-align:right;white-space:nowrap}
-  .pf th:first-child{text-align:left}
-  .pf td{padding:.31rem .55rem;border-bottom:1px solid #E8E6E0;text-align:right;font-family:'Inter',sans-serif;font-size:.68rem;white-space:nowrap}
-  .pf td:first-child{text-align:left;font-family:'Inter',sans-serif;font-size:.68rem}
-  .pf tr:nth-child(even) td{background:#F4F2EE!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .pf tr.pf-sub td{background:#E8E6E0!important;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .pf tr.pf-hi td{background:#FFF3CD!important;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    font-family:var(--font-stack);font-size:.64rem;font-weight:600;letter-spacing:.05em;padding:.4rem .58rem;text-align:right;white-space:nowrap}
+  .pf th:first-child{text-align:left;letter-spacing:.08em;text-transform:uppercase}
+  .pf td{padding:.33rem .58rem;border-bottom:1px solid #E8E6E0;text-align:right;font-family:var(--font-stack);font-size:.69rem;white-space:nowrap;color:#222}
+  .pf td:first-child{text-align:left;font-family:var(--font-stack);font-size:.69rem;color:#333}
+  .pf tr:nth-child(even) td{background:#F5F3EF!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pf tr.pf-sub td{background:#E4E2DC!important;font-weight:700;color:#000061!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pf tr.pf-hi td{background:#FBEFC4!important;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .pf tr.pf-hi td:first-child{color:#000061!important}
-  .pf .neg{color:#991B1B!important}
+  .pf .neg{color:#A61B1B!important}
   /* sensitivity tables */
-  .ps3{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
-  .st{width:100%;border-collapse:collapse;font-size:.61rem;break-inside:avoid}
+  .ps3{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+  .st{width:100%;border-collapse:collapse;font-size:.62rem;break-inside:avoid;font-variant-numeric:tabular-nums}
   .st th{background:#000061!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;
-    font-family:'Inter',sans-serif;font-size:.6rem;font-weight:600;padding:.3rem .38rem;text-align:center;white-space:nowrap}
+    font-family:var(--font-stack);font-size:.6rem;font-weight:600;padding:.32rem .4rem;text-align:center;white-space:nowrap}
   .st th.st-base-col{background:#8B6914!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .st td{padding:.27rem .38rem;text-align:center;font-family:'Inter',sans-serif;font-size:.61rem;font-weight:600;border:1px solid rgba(0,0,0,.07);white-space:nowrap}
-  .st td.st-lbl{background:#000061!important;color:#fff!important;text-align:right;font-size:.62rem;padding-right:.5rem;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .st .c-neg  {background:#FEE2E2!important;color:#991B1B!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .st .c-low  {background:#FED7AA!important;color:#92400E!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .st .c-mid  {background:#FEF3C7!important;color:#92400E!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .st .c-good {background:#D1FAE5!important;color:#065F46!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .st td{padding:.29rem .4rem;text-align:center;font-family:var(--font-stack);font-size:.62rem;font-weight:600;border:1px solid rgba(0,0,0,.08);white-space:nowrap}
+  .st td.st-lbl{background:#000061!important;color:#fff!important;text-align:right;font-size:.62rem;font-weight:600;padding-right:.5rem;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .st .c-neg  {background:#FADCDC!important;color:#8A1616!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .st .c-low  {background:#FCD9B0!important;color:#8A4A0E!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .st .c-mid  {background:#FBEFC4!important;color:#7A5A0E!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .st .c-good {background:#CFF3E1!important;color:#0A5A42!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .st .c-great{background:#6EE7B7!important;color:#064E3B!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .st .c-base {background:#FFD700!important;color:#000061!important;font-weight:700!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;outline:2px solid #C8860A}
+  .st .c-base {background:#FFD700!important;color:#000061!important;font-weight:800!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;outline:2px solid #C8860A}
   .st .c-null {background:#E5E7EB!important;color:#9CA3AF!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   /* legend */
-  .sl{display:flex;gap:.9rem;flex-wrap:wrap;margin:.3rem 0 .45rem;font-size:.65rem}
-  .sl-item{display:flex;align-items:center;gap:.25rem}
-  .sl-dot{width:9px;height:9px;display:inline-block}
+  .sl{display:flex;gap:1rem;flex-wrap:wrap;margin:.35rem 0 .5rem;font-size:.65rem;color:#333}
+  .sl-item{display:flex;align-items:center;gap:.3rem}
+  .sl-dot{width:10px;height:10px;display:inline-block;border-radius:1px}
   /* footer */
-  .pfoot{font-size:.57rem;color:#aaa;text-align:right;margin-top:.4rem;border-top:1px solid #E0DDD8;padding-top:.3rem}
+  .pfoot{font-size:.6rem;color:#8A8A8A;text-align:right;margin-top:.5rem;border-top:1px solid #E0DDD8;padding-top:.35rem;letter-spacing:.01em}
 }
 #print-root{display:none}
 /* ── Centre-align all model figures in main content (sidebar untouched) ── */
@@ -350,13 +357,13 @@ main .param-card .ccy-alloc-table td:first-child{text-align:left!important}
 
   <div style="display:flex;flex-direction:column;align-items:center;gap:.3rem;margin-top:-.5rem">
     <div style="
-      font-family:'Inter',sans-serif;
+      font-family:var(--font-stack);
       font-size:1.5rem;font-weight:700;letter-spacing:.2em;
       color:#D4AF37;text-transform:uppercase">
       SSY Projects
     </div>
     <div style="
-      font-family:'Inter',sans-serif;
+      font-family:var(--font-stack);
       font-size:1.5rem;letter-spacing:.2em;
       color:rgba(255,255,255,.45);text-transform:uppercase">
       TC Financial Model
@@ -372,7 +379,7 @@ main .param-card .ccy-alloc-table td:first-child{text-align:left!important}
         border:1px solid rgba(255,255,255,.2);
         border-radius:3px;
         color:#fff;
-        font-family:'Inter',sans-serif;
+        font-family:var(--font-stack);
         font-size:.88rem;letter-spacing:.08em;
         text-align:center;outline:none;
         transition:border-color .2s"
@@ -380,13 +387,13 @@ main .param-card .ccy-alloc-table td:first-child{text-align:left!important}
       onblur="this.style.borderColor='rgba(255,255,255,.2)'"
       onkeydown="if(event.key==='Enter')checkPw()">
     <div id="pwErr" style="
-      font-family:'Inter',sans-serif;font-size:.72rem;
+      font-family:var(--font-stack);font-size:.72rem;
       color:#FCA5A5;letter-spacing:.04em;
       min-height:1rem;opacity:0;transition:opacity .2s"></div>
     <button onclick="checkPw()" style="
       width:260px;padding:.7rem 1rem;
       background:#E8A020;border:none;border-radius:3px;
-      color:#000061;font-family:'Inter',sans-serif;
+      color:#000061;font-family:var(--font-stack);
       font-size:.82rem;font-weight:700;letter-spacing:.12em;
       text-transform:uppercase;cursor:pointer;
       transition:background .15s"
@@ -398,7 +405,7 @@ main .param-card .ccy-alloc-table td:first-child{text-align:left!important}
 
   <div style="
     position:absolute;bottom:1.5rem;
-    font-family:'Inter',sans-serif;font-size:.62rem;
+    font-family:var(--font-stack);font-size:.62rem;
     color:rgba(255,255,255,.2);letter-spacing:.06em">
     CONFIDENTIAL — SIMPSON SPENCE YOUNG
   </div>
@@ -440,7 +447,7 @@ window.addEventListener('load', ()=>{
     <button class="btn-hdr" style="font-weight:700;color:#6EE7B7;border:1px solid #6EE7B7;background:transparent" onclick="exportScenario()">💾 Save Scenario</button>
     <button class="btn-hdr" style="font-weight:700;color:#6EE7B7;border:1px solid #6EE7B7;background:transparent" onclick="document.getElementById('scenarioFileInput').click()">📂 Load Scenario</button>
     <input type="file" id="scenarioFileInput" accept=".json" style="display:none" onchange="importScenario(event)">
-    <button class="btn-print" onclick="window.print()">⎙ Print Results</button>
+    <button class="btn-print" onclick="printResults()">⎙ Print Results</button>
   </div>
 </header>
 
@@ -600,7 +607,7 @@ window.addEventListener('load', ()=>{
     </div>
     <div class="ir" style="margin-top:-.2rem">
       <label style="color:rgba(255,255,255,.35);font-size:.62rem">≈ Total Acquisition Cost (USD equiv.)</label>
-      <div id="totalAcqDisplay" style="font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;color:#E8F0FF;padding:.18rem 0">—</div>
+      <div id="totalAcqDisplay" style="font-family:var(--font-stack);font-size:.78rem;font-weight:600;color:#E8F0FF;padding:.18rem 0">—</div>
     </div>
     <div class="ir"><label>Buyer's Extras (USD) — paid in full at delivery, not financed</label><input type="text" id="extras" class="fmt-num" data-raw="300000" value="300,000"></div>
   </div>
@@ -650,7 +657,7 @@ window.addEventListener('load', ()=>{
       </div>
       <div class="ir" style="margin-top:-.2rem">
         <label style="color:rgba(255,255,255,.35);font-size:.62rem">≈ Total gross daily hire (USD equiv. Y1)</label>
-        <div id="hireTotalDisplay" style="font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;color:#E8F0FF;padding:.18rem 0">—</div>
+        <div id="hireTotalDisplay" style="font-family:var(--font-stack);font-size:.78rem;font-weight:600;color:#E8F0FF;padding:.18rem 0">—</div>
       </div>
     </div>
 
@@ -707,7 +714,7 @@ window.addEventListener('load', ()=>{
     <div class="sect-note" style="color:rgba(255,255,255,.4);font-size:.67rem;margin-bottom:.5rem">Intermediate surveys ~2.5yr · Special surveys ~5yr</div>
     <div id="ddSidebar"></div>
     <button onclick="addDrydock()" style="margin-top:.4rem;width:100%;background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);font-family:'Inter',sans-serif;
+      border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);font-family:var(--font-stack);
       font-size:.68rem;padding:.3rem;cursor:pointer;letter-spacing:.08em">+ ADD EVENT</button>
   </div>
 
@@ -722,7 +729,7 @@ window.addEventListener('load', ()=>{
     <div id="ccyAllocBody"></div>
     <div class="ir" style="margin-top:.4rem;display:flex;flex-direction:row;justify-content:space-between;align-items:center">
       <label style="margin:0">Total</label>
-      <div id="ccyPctTotal" style="font-family:'Inter',sans-serif;font-weight:700">100%</div>
+      <div id="ccyPctTotal" style="font-family:var(--font-stack);font-weight:700">100%</div>
     </div>
     <div id="ccyAddWrap" style="display:flex;gap:.4rem;align-items:center;margin-top:.5rem"></div>
   </div>
@@ -793,9 +800,9 @@ window.addEventListener('load', ()=>{
 <div id="page-predelivery" class="page">
   <div style="background:#0A1F4A;border-left:3px solid #FFD166;padding:.5rem 1rem;margin-bottom:1rem;
     display:flex;align-items:center;gap:1.5rem">
-    <span style="font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:.12em;
+    <span style="font-family:var(--font-stack);font-size:.65rem;letter-spacing:.12em;
       text-transform:uppercase;color:rgba(255,255,255,.5)">Editable cells:</span>
-    <span style="background:#0A1F4A;border:1px solid #3A5A9A;color:#FFD166;font-family:'Inter',sans-serif;
+    <span style="background:#0A1F4A;border:1px solid #3A5A9A;color:#FFD166;font-family:var(--font-stack);
       font-weight:600;padding:.15rem .5rem;font-size:.75rem">123</span>
     <span style="font-size:.72rem;color:rgba(255,255,255,.85)">Dark blue fields — % per milestone and months before delivery are all editable</span>
   </div>
@@ -853,9 +860,9 @@ window.addEventListener('load', ()=>{
 <div id="page-rates" class="page">
   <div style="background:#0A1F4A;border-left:3px solid #FFD166;padding:.5rem 1rem;margin-bottom:1rem;
     display:flex;align-items:center;gap:1.5rem">
-    <span style="font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:.12em;
+    <span style="font-family:var(--font-stack);font-size:.65rem;letter-spacing:.12em;
       text-transform:uppercase;color:rgba(255,255,255,.5)">Editable cells:</span>
-    <span style="background:#0A1F4A;border:1px solid #3A5A9A;color:#FFD166;font-family:'Inter',sans-serif;
+    <span style="background:#0A1F4A;border:1px solid #3A5A9A;color:#FFD166;font-family:var(--font-stack);
       font-weight:600;padding:.15rem .5rem;font-size:.75rem">123</span>
     <span style="font-size:.72rem;color:rgba(255,255,255,.85)">All dark blue cells are editable — click and type. USD FX locked at 1.000.</span>
   </div>
@@ -880,7 +887,7 @@ window.addEventListener('load', ()=>{
 <div id="page-fullmodel" class="page">
   <div style="background:#0A1F4A;border-left:3px solid #FFD166;padding:.5rem 1rem;margin-bottom:1rem;
     display:flex;align-items:center;gap:1.5rem">
-    <span style="font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:.12em;
+    <span style="font-family:var(--font-stack);font-size:.65rem;letter-spacing:.12em;
       text-transform:uppercase;color:rgba(255,255,255,.5)">Reference:</span>
     <span style="font-size:.78rem;color:rgba(255,255,255,.85)">Full annual breakdown — all line items across the model horizon. Greyed columns are post-charter.</span>
   </div>
@@ -1012,7 +1019,7 @@ function renderDdSidebar() {
         <div style="font-size:.63rem;color:rgba(255,255,255,.45);margin-bottom:.1rem">Yr after delivery</div>
         <input type="number" step="0.01" min="0.01" value="${dd.timing}"
           style="width:100%;background:#0A1F4A;border:1px solid #3A5A9A;color:#E8F0FF;
-          font-family:'Inter',sans-serif;font-size:.75rem;padding:.28rem .4rem;
+          font-family:var(--font-stack);font-size:.75rem;padding:.28rem .4rem;
           text-align:right;outline:none;font-weight:500"
           oninput="DRYDOCKS[${idx}].timing=parseFloat(this.value)||0"
           onfocus="this.style.borderColor='#6B9FFF'"
@@ -1022,7 +1029,7 @@ function renderDdSidebar() {
         <div style="font-size:.63rem;color:rgba(255,255,255,.45);margin-bottom:.1rem">Cost (USD)</div>
         <input type="text" step="50000" min="0" value="${numFmt(dd.cost)}"
           style="width:100%;background:#0A1F4A;border:1px solid #3A5A9A;color:#E8F0FF;
-          font-family:'Inter',sans-serif;font-size:.75rem;padding:.28rem .4rem;
+          font-family:var(--font-stack);font-size:.75rem;padding:.28rem .4rem;
           text-align:right;outline:none;font-weight:500"
           oninput="DRYDOCKS[${idx}].cost=parseFloat(String(this.value).replace(/,/g,''))||0"
           onfocus="this.value=parseFloat(String(this.value).replace(/,/g,''))||'';this.style.borderColor='#6B9FFF'"
@@ -1030,7 +1037,7 @@ function renderDdSidebar() {
       </div>
       <button onclick="removeDrydock(${idx})"
         style="background:rgba(180,0,0,.3);border:1px solid rgba(255,100,100,.3);color:rgba(255,150,150,.8);
-        font-size:.75rem;padding:.28rem .45rem;cursor:pointer;font-family:'Inter',sans-serif;
+        font-size:.75rem;padding:.28rem .45rem;cursor:pointer;font-family:var(--font-stack);
         align-self:end;height:28px">✕</button>`;
     container.appendChild(row);
   });
@@ -1211,7 +1218,7 @@ function renderHireStructureInputs() {
         <label style="font-size:.68rem;color:rgba(255,255,255,.55);white-space:nowrap;margin:0">Year ${yr}</label>
         <input type="text" id="${prefix}${yr}" class="fmt-num" maxlength="10" value="${val}"
           style="width:100%;max-width:132px;background:#0A1F4A;border:1px solid #3A5A9A;color:#E8F0FF;
-          font-family:'Inter',sans-serif;font-size:.78rem;font-weight:700;padding:.32rem .5rem;
+          font-family:var(--font-stack);font-size:.78rem;font-weight:700;padding:.32rem .5rem;
           text-align:right;outline:none">
       </div>`;
     }
@@ -1352,23 +1359,23 @@ function buildCcyAllocTable() {
     const row = document.createElement('div');
     row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.3rem;align-items:center;margin-bottom:.35rem';
     row.innerHTML = `
-      <div style="display:flex;align-items:center;gap:.3rem;font-family:'Inter',sans-serif;font-size:.78rem;font-weight:700">
+      <div style="display:flex;align-items:center;gap:.3rem;font-family:var(--font-stack);font-size:.78rem;font-weight:700">
         ${ccy}${canRemove ? `<button onclick="removeCurrencyFromLoan('${ccy}')" title="Remove"
           style="background:rgba(180,0,0,.3);border:1px solid rgba(255,100,100,.3);color:rgba(255,150,150,.8);
-          font-size:.62rem;padding:.05rem .3rem;cursor:pointer;font-family:'Inter',sans-serif;line-height:1">✕</button>` : ''}
+          font-size:.62rem;padding:.05rem .3rem;cursor:pointer;font-family:var(--font-stack);line-height:1">✕</button>` : ''}
       </div>
       <input class="ccy-pct-inp" data-ccy="${ccy}" type="number" min="0" max="100" step="5"
-        value="${ccyData[ccy].pct}" style="width:100%;border:1px solid #3A5A9A;font-family:'Inter',sans-serif;
+        value="${ccyData[ccy].pct}" style="width:100%;border:1px solid #3A5A9A;font-family:var(--font-stack);
         font-size:.78rem;padding:.26rem .3rem;text-align:center;outline:none;background:#0A1F4A;color:#E8F0FF;font-weight:700"
         oninput="ccyData['${ccy}'].pct=parseFloat(this.value)||0;updateCcyTotals()">
       <input class="ccy-sprd-inp" data-ccy="${ccy}" type="number" min="0" step="10"
-        value="${ccyData[ccy].spread}" style="width:100%;border:1px solid #3A5A9A;font-family:'Inter',sans-serif;
+        value="${ccyData[ccy].spread}" style="width:100%;border:1px solid #3A5A9A;font-family:var(--font-stack);
         font-size:.78rem;padding:.26rem .3rem;text-align:center;outline:none;background:#0A1F4A;color:#E8F0FF;font-weight:700"
         oninput="ccyData['${ccy}'].spread=parseFloat(this.value)||0;updateCcyTotals()">
       ${isUSD
         ? '<span style="font-size:.72rem;opacity:.5;text-align:center">1.000</span>'
         : `<input class="ccy-basefx-inp" data-ccy="${ccy}" type="number" min="0" step="${fxDec===0?'1':'0.001'}"
-             value="${baseFxRate[ccy].toFixed(fxDec)}" style="width:100%;border:1px solid #3A5A9A;font-family:'Inter',sans-serif;
+             value="${baseFxRate[ccy].toFixed(fxDec)}" style="width:100%;border:1px solid #3A5A9A;font-family:var(--font-stack);
              font-size:.78rem;padding:.26rem .3rem;text-align:center;outline:none;background:#0A1F4A;color:#E8F0FF;font-weight:700"
              oninput="baseFxRate['${ccy}']=parseFloat(this.value)||baseFxRate['${ccy}'];updateCcyTotals()">`}`;
     body.appendChild(row);
@@ -1383,12 +1390,12 @@ function buildCcyAllocTable() {
     } else {
       addWrap.innerHTML = `
         <select id="ccyAddSelect" style="background:#0A1F4A;border:1px solid #3A5A9A;color:#E8F0FF;
-          font-family:'Inter',sans-serif;font-size:.72rem;padding:.28rem .4rem">
+          font-family:var(--font-stack);font-size:.72rem;padding:.28rem .4rem">
           ${disabled.map(c=>`<option value="${c}">${c}</option>`).join('')}
         </select>
         <button onclick="addCurrencyToLoan(document.getElementById('ccyAddSelect').value)"
           style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.25);color:#E8F0FF;
-          font-family:'Inter',sans-serif;font-size:.68rem;padding:.28rem .6rem;cursor:pointer;letter-spacing:.05em">+ ADD</button>`;
+          font-family:var(--font-stack);font-size:.68rem;padding:.28rem .6rem;cursor:pointer;letter-spacing:.05em">+ ADD</button>`;
     }
   }
   updateCcyTotals();
@@ -1481,7 +1488,7 @@ function buildPreDelivery() {
     // Editable instalment % input
     const pctInput = `<input type="number" min="0" max="100" step="1" value="${ms.pct}"
       style="width:54px;border:1px solid #3A5A9A;background:#EEF2FF;
-      color:#000061;font-family:'Inter',sans-serif;font-size:.76rem;padding:.2rem .35rem;
+      color:#000061;font-family:var(--font-stack);font-size:.76rem;padding:.2rem .35rem;
       text-align:right;outline:none;font-weight:600"
       oninput="MILESTONES[${idx}].pct=parseFloat(this.value)||0;buildPreDelivery()"
       onfocus="this.style.background='#E0E8FF';this.style.borderColor='#000061'"
@@ -1493,7 +1500,7 @@ function buildPreDelivery() {
       ? `<span style="opacity:.5">${idx===0?'(Signing)':'(Delivery)'}</span>`
       : `<input type="number" step="0.5" value="${ms.monthsFromDelivery}"
           style="width:52px;border:1px solid #3A5A9A;background:#EEF2FF;
-          color:#000061;font-family:'Inter',sans-serif;font-size:.76rem;padding:.2rem .35rem;
+          color:#000061;font-family:var(--font-stack);font-size:.76rem;padding:.2rem .35rem;
           text-align:right;outline:none;font-weight:600"
           oninput="MILESTONES[${idx}].monthsFromDelivery=parseFloat(this.value)||0;buildPreDelivery()"
           onfocus="this.style.background='#E0E8FF';this.style.borderColor='#000061'"
@@ -1503,10 +1510,10 @@ function buildPreDelivery() {
     // Editable bank % input — delivery auto-computed, all others user-editable
     const isLast  = idx===rows.length-1;
     const bankPctInput = isLast
-      ? `<span style="opacity:.65;font-family:'Inter',sans-serif">${ms.bankPct.toFixed(1)}% (auto)</span>`
+      ? `<span style="opacity:.65;font-family:var(--font-stack)">${ms.bankPct.toFixed(1)}% (auto)</span>`
       : `<input type="number" min="0" max="100" step="5" value="${ms.bankPct}"
           style="width:54px;border:1px solid #3A5A9A;background:#EEF2FF;
-          color:#000061;font-family:'Inter',sans-serif;font-size:.76rem;padding:.2rem .35rem;
+          color:#000061;font-family:var(--font-stack);font-size:.76rem;padding:.2rem .35rem;
           text-align:right;outline:none;font-weight:600"
           oninput="MILESTONES[${idx}].bankPct=parseFloat(this.value)||0;buildPreDelivery()"
           onfocus="this.style.background='#E0E8FF';this.style.borderColor='#000061'"
@@ -1521,7 +1528,7 @@ function buildPreDelivery() {
       <td style="text-align:center">${pctInput}</td>
       <td>${fmtU(ms.amount)}</td>
       <td style="text-align:center">${bankPctInput}</td>
-      <td style="text-align:right;font-family:'Inter',sans-serif">${ms.bankAmount>0?fmtU(ms.bankAmount):'—'}</td>
+      <td style="text-align:right;font-family:var(--font-stack)">${ms.bankAmount>0?fmtU(ms.bankAmount):'—'}</td>
       <td style="text-align:center">${ms.interestPeriod>0?ms.interestPeriod.toFixed(1):'—'}</td>
       <td>${ms.interest>0?fmtU(ms.interest):'—'}</td>`;
     tbody.appendChild(tr);
@@ -1544,24 +1551,24 @@ function buildPreDelivery() {
         ${!instalPctOk?'⚠ Instalments must = 100%':'✓ Instalments OK'}
       </span>
     </td>
-    <td style="text-align:center;font-weight:700;font-family:'Inter',sans-serif;
+    <td style="text-align:center;font-weight:700;font-family:var(--font-stack);
       ${!instalPctOk?'color:#FCA5A5':''}">${totalPct}%</td>
     <td>${fmtU(rows.reduce((s,r)=>s+r.amount,0))}</td>
-    <td style="text-align:center;font-weight:700;font-family:'Inter',sans-serif;">
+    <td style="text-align:center;font-weight:700;font-family:var(--font-stack);">
       <span style="${!bankPctOk?'color:#FCA5A5':''}">
         ${bankPctOk?'✓':'⚠'} ${weightedBankPct.toFixed(1)}% ${bankPctOk?'= LTV':'≠ LTV ('+ltvPct.toFixed(0)+'%)'}
       </span>
     </td>
     <td>${fmtU(rows.reduce((s,r)=>s+r.bankAmount,0))}</td>
     <td></td>
-    <td style="font-weight:600;font-family:'Inter',sans-serif">${fmtU(totalInterest)}</td>`;
+    <td style="font-weight:600;font-family:var(--font-stack)">${fmtU(totalInterest)}</td>`;
   tbody.appendChild(trSum);
 
   // Total interest row
   const trTot = document.createElement('tr');
   trTot.className = 'subtotal';
   trTot.innerHTML = `<td colspan="9" style="text-align:right;font-weight:600">Total Pre-delivery Interest Cost</td>
-    <td style="font-weight:600;font-family:'Inter',sans-serif">${fmtU(totalInterest)}</td>`;
+    <td style="font-weight:600;font-family:var(--font-stack)">${fmtU(totalInterest)}</td>`;
   tbody.appendChild(trTot);
 
   // Equity waterfall
@@ -1875,7 +1882,7 @@ function buildFullModelTable(vesselPrice, extras, ltv, amortYrs, tcDur, grossHir
     const tr=document.createElement('tr');
     if(row.type==='sec'){
       tr.innerHTML=`<td colspan="${yrs.length+2}" style="background:var(--navy);color:rgba(255,255,255,.8);
-        font-family:'Inter',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em;
+        font-family:var(--font-stack);font-size:.68rem;font-weight:700;letter-spacing:.1em;
         text-transform:uppercase;padding:.38rem .75rem;position:sticky;left:0">${row.label}</td>`;
       tbody.appendChild(tr); return;
     }
@@ -2212,11 +2219,11 @@ function buildPrintPages(params) {
 
   // Build header row
   let p4Head = `<tr>
-    <th style="text-align:left;min-width:200px;background:#000061;color:#fff;font-family:'Inter',sans-serif;font-size:.52rem;font-weight:600;letter-spacing:.06em;padding:.32rem .45rem;white-space:nowrap">Line Item</th>`;
+    <th style="text-align:left;min-width:200px;background:#000061;color:#fff;font-family:var(--font-stack);font-size:.52rem;font-weight:600;letter-spacing:.06em;padding:.32rem .45rem;white-space:nowrap">Line Item</th>`;
   yrs4.forEach(yr=>{
-    p4Head += `<th style="background:#000061;color:#fff;font-family:'Inter',sans-serif;font-size:.52rem;font-weight:600;padding:.32rem .38rem;text-align:center;white-space:nowrap">Y${yr}</th>`;
+    p4Head += `<th style="background:#000061;color:#fff;font-family:var(--font-stack);font-size:.52rem;font-weight:600;padding:.32rem .38rem;text-align:center;white-space:nowrap">Y${yr}</th>`;
   });
-  p4Head += `<th style="background:#002880;color:#fff;font-family:'Inter',sans-serif;font-size:.52rem;font-weight:600;padding:.32rem .38rem;text-align:center">TOT</th></tr>`;
+  p4Head += `<th style="background:#002880;color:#fff;font-family:var(--font-stack);font-size:.52rem;font-weight:600;padding:.32rem .38rem;text-align:center">TOT</th></tr>`;
 
   // Build data rows
   const fmtV4 = (n,postTC,balance)=>{
@@ -2232,22 +2239,22 @@ function buildPrintPages(params) {
   let p4Body='';
   ROWS4.forEach(row=>{
     if(row.type==='sec'){
-      p4Body+=`<tr><td colspan="${yrs4.length+2}" style="background:#000061;color:rgba(255,255,255,.8);font-family:'Inter',sans-serif;font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .45rem;-webkit-print-color-adjust:exact;print-color-adjust:exact">${row.label}</td></tr>`;
+      p4Body+=`<tr><td colspan="${yrs4.length+2}" style="background:#000061;color:rgba(255,255,255,.8);font-family:var(--font-stack);font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .45rem;-webkit-print-color-adjust:exact;print-color-adjust:exact">${row.label}</td></tr>`;
       return;
     }
     const bg   = row.hi?'#FFF3CD':row.sub?'#F0F0F0':'#FFFFFF';
     const fw   = row.hi?'700':row.sub?'600':'400';
     const pl   = row.sub||row.hi?'.45rem':'1rem';
-    let cells = `<td style="background:${bg};font-weight:${fw};padding:.28rem ${pl};padding-left:${pl};font-family:'Inter',sans-serif;font-size:.56rem;white-space:nowrap;border-bottom:1px solid #E8E6E0;-webkit-print-color-adjust:exact;print-color-adjust:exact">${row.label}</td>`;
+    let cells = `<td style="background:${bg};font-weight:${fw};padding:.28rem ${pl};padding-left:${pl};font-family:var(--font-stack);font-size:.56rem;white-space:nowrap;border-bottom:1px solid #E8E6E0;-webkit-print-color-adjust:exact;print-color-adjust:exact">${row.label}</td>`;
     let total=0;
     yrs4.forEach(yr=>{
       const d=YD4[yr]; const val=d[row.key]||0;
       if(!row.balance) total+=val;
       const cellBg = d.postTC ? '#F8F8F8' : bg;
-      cells+=`<td style="background:${cellBg};font-weight:${fw};padding:.28rem .38rem;text-align:right;font-family:'Inter',sans-serif;font-size:.56rem;border-bottom:1px solid #E8E6E0;white-space:nowrap;-webkit-print-color-adjust:exact;print-color-adjust:exact">${fmtV4(val,d.postTC,row.balance)}</td>`;
+      cells+=`<td style="background:${cellBg};font-weight:${fw};padding:.28rem .38rem;text-align:right;font-family:var(--font-stack);font-size:.56rem;border-bottom:1px solid #E8E6E0;white-space:nowrap;-webkit-print-color-adjust:exact;print-color-adjust:exact">${fmtV4(val,d.postTC,row.balance)}</td>`;
     });
     const totBg = row.hi?'#FFF3CD':'#EEF0F8';
-    cells+=`<td style="background:${totBg};font-weight:700;padding:.28rem .38rem;text-align:right;font-family:'Inter',sans-serif;font-size:.56rem;border-bottom:1px solid #E8E6E0;-webkit-print-color-adjust:exact;print-color-adjust:exact">${row.balance?'<span style="color:#ccc">—</span>':fmtV4(total,false,false)}</td>`;
+    cells+=`<td style="background:${totBg};font-weight:700;padding:.28rem .38rem;text-align:right;font-family:var(--font-stack);font-size:.56rem;border-bottom:1px solid #E8E6E0;-webkit-print-color-adjust:exact;print-color-adjust:exact">${row.balance?'<span style="color:#ccc">—</span>':fmtV4(total,false,false)}</td>`;
     p4Body+=`<tr>${cells}</tr>`;
   });
 
@@ -3132,6 +3139,28 @@ function renderChartToImage(config, width=760, height=320) {
 // SAVE / LOAD SCENARIO — export all inputs to a local JSON file and
 // restore them later, since this page has no server/database and
 // otherwise resets to the base parameters on every visit.
+// ═══════════════════════════════════════════════════════════════
+// PRINT — ensure web fonts are fully loaded before opening the print
+// dialog. Without this, the browser can open the print/PDF dialog before
+// Inter has downloaded, rendering the PDF in a fallback face (or with
+// some weights missing). document.fonts.ready resolves once all
+// @font-face resources in use have loaded.
+// ═══════════════════════════════════════════════════════════════
+function printResults() {
+  const go = () => window.print();
+  if (document.fonts && document.fonts.ready) {
+    // Explicitly request the weights the print sheet uses so they're
+    // guaranteed to be in the cache before printing.
+    const weights = ['400','500','600','700','800'];
+    Promise.all(weights.map(w => document.fonts.load(w + ' 1rem Inter').catch(()=>{})))
+      .then(() => document.fonts.ready)
+      .then(go)
+      .catch(go);
+  } else {
+    go();
+  }
+}
+
 // ═══════════════════════════════════════════════════════════════
 function exportScenario() {
   const state = { version: 1, savedAt: new Date().toISOString(), inputs: {}, data: {} };
