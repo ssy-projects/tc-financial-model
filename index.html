@@ -782,7 +782,7 @@ window.addEventListener('load', ()=>{
   <p class="sect-note" style="margin-top:1rem" id="sens3Label">Table 3 — FX shift vs Residual value · One table per active loan currency · All other inputs fixed</p>
   <div id="sens3Container"></div>
 
-  <p class="sect-note" style="margin-top:1rem">Table 4 — Financing LTV shift (rows, ±2.5% steps to ±10%) vs TC Hire Rate shift (cols, ±$50/day steps to ±$250/day) · All other inputs fixed</p>
+  <p class="sect-note" style="margin-top:1rem">Table 4 — Financing LTV shift (rows, ±2.5% steps to ±10%) vs TC Hire Rate shift (cols, ±$100/day steps to ±$500/day) · All other inputs fixed</p>
   <div class="sens-wrap"><table class="sens-tbl" id="sensLtvHire"></table></div>
 
   <div class="panel-title">Parameters Used in This Calculation</div>
@@ -2497,7 +2497,7 @@ function calculate() {
   // Table 4: Financing LTV shift vs TC Hire Rate shift
   const ltvSteps = [-0.10,-0.075,-0.05,-0.025,0,0.025,0.05,0.075,0.10];
   const ltvLblFn = v=>v===0?'BASE ('+fmtP(ltv*100,1)+')':(v>0?'+':'')+fmtP(v*100,1);
-  const hireSteps = [-250,-200,-150,-100,-50,0,50,100,150,200,250];
+  const hireSteps = [-500,-400,-300,-200,-100,0,100,200,300,400,500];
   const hireVals  = hireSteps.map(d => Math.max(0, grossHireUSD + d));
   const hireHdrs  = hireVals.map(h => '$'+fmtN(h)+'/d');
   const baseHireIdx = hireSteps.indexOf(0); // always 5
